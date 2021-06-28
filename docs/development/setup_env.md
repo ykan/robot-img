@@ -3,8 +3,8 @@
 ## 版本管理
 
 - [x] `.gitignore`
-- [] `cz`
-- [] `husky`
+- [x] `cz`
+- [x] `husky`
 
 ## 编码相关
 
