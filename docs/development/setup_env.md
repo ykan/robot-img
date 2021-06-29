@@ -11,16 +11,16 @@
 - [] 目录结构
 - [x] `.editorconfig`
 - [] `eslint`
-- [] `lint-stage`
-- [] `prettier`
+- [x] `lint-stage`
+- [x] `prettier`
 - [] `babel` 配置
 - [] `ts` 配置
 
 ## 开发调试
 
-- [] `yarn`
+- [x] `yarn`
 - [] `vite` or `snowpack` 搭建开发环境
-- [] `jest` 单测
+- [x] `jest` 单测
 - [] `e2e` 测试
 
 ## 发包

@@ -1,0 +1,26 @@
+{
+  "name": "@robot-img/react-img",
+  "version": "1.0.0",
+  "description": "robot-img",
+  "main": "index.js",
+  "module": "dist/react-img.esm-bundler.js",
+  "types": "dist/react-img.d.ts",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ykan/robot-img.git"
+  },
+  "keywords": [
+    "lazyload",
+    "img"
+  ],
+  "author": "ykan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ykan/robot-img/issues"
+  },
+  "homepage": "https://github.com/ykan/robot-img#readme"
+}

@@ -7,7 +7,11 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage",
+    "test:last": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage --changedSince origin/master",
+    "test:clear": "BABEL_ENV=test jest --clearCache",
+    "test:debug": "BABEL_ENV=test node --inspect-brk node_modules/.bin/jest --runInBand",
+    "test:watch": "BABEL_ENV=test jest --watch --verbose --coverage",
     "prepare": "husky install"
   },
   "repository": {
@@ -29,15 +33,23 @@
     "singleQuote": true
   },
   "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
+    "babel-jest": "^27.0.6",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.29.0",
     "eslint-plugin-react": "^7.24.0",
     "husky": ">=6",
+    "jest": "^27.0.6",
     "lint-staged": ">=10",
-    "prettier": "2.3.2"
+    "prettier": "2.3.2",
+    "typescript": "^4.3.4"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix",

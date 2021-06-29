@@ -103,14 +103,6 @@ jspm_packages/
 # Ignore all local history of files
 .history
 
-### API ###
-api/*.json
-api/apiData.ts
-**/src/build-export.ts
-
-### Docz ###
-.docz
-
 ### library ###
 
 lib
@@ -118,3 +110,4 @@ es
 dist
 build
 packages/*/types
+package-lock.json
