@@ -22,6 +22,8 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 
   const [imgSrc, setImgSrc] = React.useState('')
 
+  // @TODO 后面再测
+  /* istanbul ignore next */
   React.useEffect(() => {
     // 当 context 变了，更新 pool
     if (poolRef.current !== imgPool) {
@@ -35,6 +37,9 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   }, [imgPool])
 
   const handleRef = useForkRef(ref, imgRef)
+
+  // @TODO 后面再测
+  /* istanbul ignore next */
   React.useEffect(() => {
     // 如果 src 不存在，则不处理
     if (!src) {

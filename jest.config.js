@@ -29,7 +29,11 @@ module.exports = {
 
   // An array of regexp pattern strings used to skip coverage collection
   // FIXME: Menu 重构先 ignore
-  coveragePathIgnorePatterns: ['/node_modules/'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    // copy 过来的，就不测了
+    '/packages/react-img/src/useForkRef.ts',
+  ],
 
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ['html', 'json', 'text-summary'],

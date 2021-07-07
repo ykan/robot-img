@@ -24,7 +24,7 @@ describe('tick & occur', () => {
     const updateFn = jest.spyOn(pool1, 'update')
     await waitTime(100)
     // console.log(updateFn.mock.calls)
-    expect(updateFn.mock.calls.length > 5).toBe(true)
+    expect(updateFn.mock.calls.length > 1).toBe(true)
     updateFn.mockRestore()
   })
 
