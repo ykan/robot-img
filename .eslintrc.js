@@ -10,5 +10,14 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react-hooks', 'jest'],
-  rules: {},
+  rules: {
+    'max-nested-callbacks': ['error', 5],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'error',
+    'jest/prefer-to-have-length': 'warn',
+    'jest/valid-expect': 'error',
+  },
 }

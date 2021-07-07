@@ -9,6 +9,20 @@
     "index.js",
     "dist"
   ],
+  "peerDependencies": {
+    "@types/react": ">=16.9.0",
+    "@types/react-dom": ">=16.9.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ykan/robot-img.git"

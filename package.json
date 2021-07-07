@@ -28,19 +28,19 @@
     "url": "https://github.com/ykan/robot-img/issues"
   },
   "homepage": "https://github.com/ykan/robot-img#readme",
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@babel/plugin-transform-runtime": "^7.14.5",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-typescript": "^7.14.5",
+    "@snowpack/plugin-react-refresh": "^2.5.0",
+    "@snowpack/plugin-typescript": "^1.2.1",
+    "@testing-library/react-hooks": "^7.0.1",
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "babel-jest": "^27.0.6",
+    "babel-plugin-module-resolver": "^4.1.0",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.29.0",
@@ -53,15 +53,23 @@
     "jest": "^27.0.6",
     "lint-staged": ">=10",
     "prettier": "2.3.2",
+    "react-test-renderer": "^17.0.2",
+    "snowpack": "^3.7.1",
     "typescript": "^4.3.4"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
+    "*.{js,ts,tsx}": "prettier --write"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@types/react": "^17.0.13",
+    "@types/react-dom": "^17.0.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }

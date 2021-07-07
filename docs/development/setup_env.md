@@ -8,13 +8,13 @@
 
 ## 编码相关
 
-- [] 目录结构
+- [x] 目录结构
 - [x] `.editorconfig`
-- [] `eslint`
+- [x] `eslint`
 - [x] `lint-stage`
 - [x] `prettier`
-- [] `babel` 配置
-- [] `ts` 配置
+- [x] `babel` 配置
+- [x] `ts` 配置
 
 ## 开发调试
 
@@ -23,11 +23,12 @@
 - [x] `jest` 单测
 - [] `e2e` 测试
 
-## 发包
+## 发包相关
 
+- [] 文档相关工具
 - [] `CHANGELOG`
 
-## CICD
+### CICD
 
 - [] 单分支提交跑单测
 - [] 自动测试覆盖
