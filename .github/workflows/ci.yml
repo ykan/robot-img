@@ -16,8 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: bahmutov/npm-install@v1
-      - name: run yarn
-        run: yarn
       - name: Run unit tests
         run: yarn test
       - uses: codecov/codecov-action@v1
