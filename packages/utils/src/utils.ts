@@ -48,20 +48,38 @@ export function getContainerRect(
 }
 
 /**
+ * 等待图片加载完成
+ * @param imgSrc 图片地址
+ * @param crossOrigin 参考：https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_enabled_image
+ * @returns Promise<HTMLImageElement>
+ */
+export function waitImgLoaded(imgSrc: string, crossOrigin?: 'Anonymous' | string) {
+  const { Image } = window
+  const img: HTMLImageElement = new Image()
+  if (crossOrigin) {
+    img.crossOrigin = crossOrigin
+  }
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    img.onerror = (e: string | Event) => {
+      reject(e)
+    }
+    img.onload = () => {
+      resolve(img)
+    }
+    img.src = imgSrc
+  })
+}
+
+/**
  * 检测是否可用 webp 格式
  * 正常耗时，低于 1ms
  */
-export function checkWebp(): Promise<boolean> {
-  return new Promise((resolve) => {
-    const { Image } = window
-    const img = new Image() // eslint-disable-line
-    img.onload = () => {
-      resolve(img.height === 1)
-    }
-    img.onerror = () => {
-      resolve(false)
-    }
-    img.src =
+export async function checkWebpSupported() {
+  try {
+    await waitImgLoaded(
       'data:image/webp;base64,UklGRiYAAABXRUJQVlA4IBoAAAAwAQCdASoBAAEAAAAMJaQAA3AA/v89WAAAAA=='
-  })
+    )
+    return true
+  } catch (e) {}
+  return false
 }

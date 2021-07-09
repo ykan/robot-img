@@ -1,27 +1,41 @@
-import { createSrcTpl } from './srcTpl'
-import { ImgCheckType, ImgItem, ImgPool, ImgPoolOptions } from './types'
+import { createSrcTpl } from './createSrcTpl'
+import { ImgEventType, ImgItem, ImgPool, ImgPoolOptions } from './types'
 import { getContainerRect, overlap } from './utils'
 
+let uid = 0
 export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
-  const { container = window, tickTime, containerRectFn, srcTpl, globalVars } = opts
+  const {
+    container = window,
+    tickTime,
+    containerRectFn,
+    srcTpl,
+    srcTplGlobalVars,
+    globalVars,
+    name,
+  } = opts
 
   let tickTimer = -1
-  let currentCheckType: ImgCheckType = 'none'
+  let currentEventType: ImgEventType | 'none' = 'none'
   let isChecking = false
+  let shouldUpdateContainerRect = false
   let innerContainerRect = getContainerRect(container, containerRectFn)
   let innerContainerRectFn = containerRectFn
   let destroyFn = () => {}
   let innerTickTime = tickTime || 150
   let innerContainer = container
-  const innerSrcTpl = createSrcTpl(srcTpl, globalVars)
+  let innerGlobalVars = globalVars || {}
+  let innerSrcTplGlobalVars = srcTplGlobalVars
+  let innerSrcTpl = srcTpl
+  let finalSrcTpl = createSrcTpl(innerSrcTpl, innerSrcTplGlobalVars)
+  let innerName = name ? `${name}_${uid++}` : `${uid++}`
   const innerImgs: Set<ImgItem> = new Set()
 
   const instance: ImgPool = {
     get imgs() {
       return innerImgs
     },
-    get currentCheckType() {
-      return currentCheckType
+    get currentEventType() {
+      return currentEventType
     },
 
     get tickTime() {
@@ -36,8 +50,16 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       return innerContainer
     },
 
+    get globalVars() {
+      return innerGlobalVars
+    },
+
+    get name() {
+      return innerName
+    },
+
     srcTpl(srcTpl) {
-      return innerSrcTpl(srcTpl)
+      return finalSrcTpl(srcTpl)
     },
 
     reset(newOpts) {
@@ -47,13 +69,28 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       if (newOpts.containerRectFn) {
         innerContainerRectFn = newOpts.containerRectFn
       }
+      if (newOpts.srcTplGlobalVars) {
+        innerSrcTplGlobalVars = newOpts.srcTplGlobalVars
+      }
+      if (newOpts.srcTpl) {
+        innerSrcTpl = newOpts.srcTpl
+      }
+      if (newOpts.srcTpl || newOpts.srcTplGlobalVars) {
+        finalSrcTpl = createSrcTpl(innerSrcTpl, innerSrcTplGlobalVars)
+      }
       if (newOpts.container) {
         innerContainer = newOpts.container
         innerContainerRect = getContainerRect(newOpts.container, innerContainerRectFn)
       }
+      if (newOpts.name) {
+        innerName = `${name}_${uid++}`
+      }
       // 注意：如果只是改函数，容器没有变，那么也得更新一下
       if (newOpts.containerRectFn && !newOpts.container) {
         innerContainerRect = getContainerRect(newOpts.container, innerContainerRectFn)
+      }
+      if (newOpts.globalVars) {
+        innerGlobalVars = newOpts.globalVars
       }
       instance.destroy()
       instance.init()
@@ -63,6 +100,7 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
         instance.occur('scroll')
       }
       const resizeHandler = () => {
+        shouldUpdateContainerRect = true
         instance.occur('resize')
       }
       innerContainer.addEventListener('scroll', scrollHandler, true)
@@ -78,23 +116,24 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
     overlap(rect) {
       return overlap(rect, innerContainerRect)
     },
-    occur(type) {
-      if (type === 'scroll' && currentCheckType === 'none') {
-        currentCheckType = 'scroll'
-      } else if (type === 'resize' && currentCheckType === 'none') {
-        currentCheckType = 'resize'
-      } else if (type === 'resize' && currentCheckType === 'scroll') {
-        currentCheckType = 'scroll+resize'
-      } else if (type === 'scroll' && currentCheckType === 'resize') {
-        currentCheckType = 'scroll+resize'
+    occur(eventType) {
+      if (currentEventType === 'scroll+resize') {
+        return
+      }
+      if (eventType === 'resize' && currentEventType === 'scroll') {
+        currentEventType = 'scroll+resize'
+      } else if (eventType === 'scroll' && currentEventType === 'resize') {
+        currentEventType = 'scroll+resize'
+      } else if (eventType !== currentEventType) {
+        currentEventType = eventType
       }
     },
 
-    checkImgs(done) {
+    checkImgs(eventType, done) {
       const checkPromises: Promise<void>[] = []
       innerImgs.forEach((img) => {
-        if (img.shouldCheck && img.checkType === currentCheckType) {
-          checkPromises.push(img.onChecked())
+        if (img.shouldCheck) {
+          checkPromises.push(img.onChecked(eventType))
         }
       })
       if (checkPromises.length) {
@@ -103,19 +142,23 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
           .catch(() => {})
           .finally(() => {
             isChecking = false
-            done!()
+            done?.()
           })
       }
     },
 
     update() {
+      if (shouldUpdateContainerRect) {
+        shouldUpdateContainerRect = false
+        innerContainerRect = getContainerRect(innerContainer, innerContainerRectFn)
+      }
       // 即没发生滚动，也没发生变形，那么啥也不干
       // 正在检测也啥都不干
-      if (currentCheckType === 'none' || isChecking) {
+      if (currentEventType === 'none' || isChecking) {
         return
       }
-      currentCheckType = 'none'
-      instance.checkImgs()
+      instance.checkImgs(currentEventType)
+      currentEventType = 'none'
     },
     tick(isStart = false) {
       // 防止执行很多遍

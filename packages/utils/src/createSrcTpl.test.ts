@@ -1,4 +1,4 @@
-import { createAliOssRenderFn, createSrcTpl } from './srcTpl'
+import { createSrcTpl } from './createSrcTpl'
 
 describe('默认情况', () => {
   const srcTpl = createSrcTpl()
@@ -30,6 +30,7 @@ describe('默认情况', () => {
   })
 
   test('自定义全局默认处理函数', () => {
+    const a: any = {}
     const globalSrcTpl = createSrcTpl(() => 'src1', { webp: false, ratio: 1 })
     expect(
       globalSrcTpl()({
@@ -37,34 +38,5 @@ describe('默认情况', () => {
         rect: mockRect as DOMRect,
       })
     ).toBe('src1')
-  })
-})
-
-describe('test ali oss tpl render function', () => {
-  test('webp = true, resize', () => {
-    const tpl = createAliOssRenderFn({
-      webp: true,
-      ratio: 1.5,
-    })
-    const mockRect = {
-      width: 100,
-      height: 100,
-    }
-    const result = tpl({ rect: mockRect as DOMRect, src: 'src' })
-    expect(result).toBe('src?x-oss-process=image/resize,m_fill,w_150,h_150/format,webp')
-  })
-
-  test('width = 0', () => {
-    // 用全局的来实例化
-    const tpl = createSrcTpl('ali-oss', {
-      webp: false,
-      ratio: 1.5,
-    })
-    const mockRect = {
-      width: 0,
-      height: 100,
-    }
-    const result = tpl()({ rect: mockRect as DOMRect, src: 'src' })
-    expect(result).toBe('src')
   })
 })

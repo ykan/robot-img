@@ -6,7 +6,7 @@ module.exports = {
     'jest/globals': true,
   },
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 2020,
     sourceType: 'module',
   },
   plugins: ['react-hooks', 'jest'],

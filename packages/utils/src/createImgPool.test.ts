@@ -15,7 +15,7 @@ describe('tick & occur', () => {
     pool.tick()
     pool.stopTick()
     expect(checkImgs).toHaveBeenCalledTimes(1)
-    expect(pool.currentCheckType).toBe('none')
+    expect(pool.currentEventType).toBe('none')
     checkImgs.mockRestore()
   })
 
@@ -29,20 +29,20 @@ describe('tick & occur', () => {
   })
 
   test('occur', () => {
-    expect(pool.currentCheckType).toBe('none')
+    expect(pool.currentEventType).toBe('none')
     pool.occur('scroll')
-    expect(pool.currentCheckType).toBe('scroll')
+    expect(pool.currentEventType).toBe('scroll')
     pool.occur('resize')
-    expect(pool.currentCheckType).toBe('scroll+resize')
+    expect(pool.currentEventType).toBe('scroll+resize')
 
     pool.tick()
     pool.stopTick()
 
-    expect(pool.currentCheckType).toBe('none')
+    expect(pool.currentEventType).toBe('none')
     pool.occur('resize')
-    expect(pool.currentCheckType).toBe('resize')
+    expect(pool.currentEventType).toBe('resize')
     pool.occur('scroll')
-    expect(pool.currentCheckType).toBe('scroll+resize')
+    expect(pool.currentEventType).toBe('scroll+resize')
   })
 })
 
@@ -101,7 +101,7 @@ describe('init & reset', () => {
 describe('check imgs', () => {
   const pool = createImgPool({
     srcTpl: 'ali-oss',
-    globalVars: {
+    srcTplGlobalVars: {
       webp: false,
       ratio: 1,
     },
@@ -109,10 +109,9 @@ describe('check imgs', () => {
   test('当没有图片需要检测时，不做任何处理', () => {
     pool.imgs.add({
       shouldCheck: false,
-      checkType: 'scroll',
       onChecked: async () => {},
     })
-    pool.checkImgs()
+    pool.checkImgs('scroll')
     pool.imgs.clear()
   })
   test('检测图片', (done) => {
@@ -127,9 +126,9 @@ describe('check imgs', () => {
     const onChecked = jest.spyOn(img, 'onChecked')
     pool.imgs.add(img)
     pool.occur('scroll')
-    pool.checkImgs(() => {
+    pool.checkImgs('scroll', () => {
       done()
-      pool.checkImgs()
+      pool.checkImgs('scroll')
       expect(onChecked).toBeCalledTimes(1)
       pool.imgs.clear()
     })
@@ -146,7 +145,7 @@ describe('check imgs', () => {
     }
     pool.imgs.add(img)
     pool.occur('scroll')
-    pool.checkImgs(() => {
+    pool.checkImgs('scroll', () => {
       done()
       pool.imgs.clear()
     })

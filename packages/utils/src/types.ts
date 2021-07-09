@@ -1,6 +1,6 @@
 export type ImgRect = Pick<DOMRect, 'top' | 'bottom' | 'left' | 'right'>
 
-export type ImgCheckType = 'none' | 'scroll' | 'resize' | 'scroll+resize'
+export type ImgEventType = 'scroll' | 'resize' | 'scroll+resize'
 export interface ImgSrcTplGlobals {
   webp: boolean
   ratio: number
@@ -25,21 +25,38 @@ export type ImgSrcTplRenderFn = (attrs: ImgSrcTplFnArgs) => string
 /** 全局设置时的类型 */
 export type ImgSrcTpl = (srcTpl?: ImgSrcTplPropFn) => ImgSrcTplRenderFn
 
+export interface ImgPoolGlobals {
+  /** 全局默认图片 */
+  defaultImgSrc?: string
+  /** 图片加载出错时的全局默认设置图片 */
+  defaultErrorImgSrc?: string
+  /** 全局样式名 */
+  className?: string
+  /** 图片不同状态下的样式名前缀 */
+  statusClassNamePrefix?: string
+  [key: string]: string | undefined
+}
+
 export interface ImgPoolOptions {
   /** 容器节点，也可以是 window */
   container?: Window | HTMLElement
+  /** 设置需要检测的容器区域 */
   containerRectFn?: (rect: DOMRect) => ImgRect
   tickTime?: number
-  srcTpl?: ImgSrcTplRenderFn | 'ali-oss'
-  globalVars?: ImgSrcTplGlobals
+  srcTpl?: ImgSrcTplRenderFn
+  srcTplGlobalVars?: ImgSrcTplGlobals
+  globalVars?: ImgPoolGlobals
+  name?: string
 }
 
 export interface ImgPool {
   readonly imgs: Set<ImgItem>
-  readonly currentCheckType: ImgCheckType
+  readonly currentEventType: ImgEventType | 'none'
   readonly containerRect: ImgRect
   readonly tickTime: number
   readonly container: Window | HTMLElement
+  readonly globalVars: ImgPoolGlobals
+  readonly name: string
 
   srcTpl: ImgSrcTpl
 
@@ -56,10 +73,10 @@ export interface ImgPool {
   destroy: () => void
 
   /** 执行一遍检测 */
-  checkImgs: (done?: () => void) => void
+  checkImgs: (eventType: ImgEventType, done?: () => void) => void
 
   /** 发生了某个事件 */
-  occur: (type: 'scroll' | 'resize') => void
+  occur: (type: ImgEventType) => void
 
   /** 心跳更新函数 */
   update: () => void
@@ -74,8 +91,7 @@ export interface ImgPool {
 export interface ImgItem {
   /** 当前实例是否需要检测 */
   shouldCheck: boolean
-  /** 要检测的类型，比如 'scroll' 表示发生滚动则检测 */
-  checkType: Omit<ImgCheckType, 'none'>
+
   /** 触发检测时调用 */
-  onChecked: () => Promise<void>
+  onChecked: (event: ImgEventType) => Promise<void>
 }

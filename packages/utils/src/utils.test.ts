@@ -1,4 +1,4 @@
-import { checkWebp, getContainerRect, isWindow, overlap } from './utils'
+import { checkWebpSupported, getContainerRect, isWindow, overlap, waitImgLoaded } from './utils'
 
 describe('测试 overlap', () => {
   const container = {
@@ -129,7 +129,7 @@ describe('测试 getContainerRect', () => {
     expect(isWindow({})).toBe(false)
   })
   test('getContainerRect of window', () => {
-    expect(getContainerRect(window)).toEqual({
+    expect(getContainerRect()).toEqual({
       top: -window.innerHeight * 0.5,
       bottom: window.innerHeight * 1.5,
       left: -window.innerWidth * 0.5,
@@ -153,7 +153,7 @@ describe('测试 getContainerRect', () => {
   })
 })
 
-describe('测试 checkWebp', () => {
+describe('测试 checkWebp && waitImgLoaded', () => {
   test('check webp', async () => {
     const win: any = window as any
     const FormerImage = win.Image
@@ -163,11 +163,26 @@ describe('测试 checkWebp', () => {
       img.height = 1
     }
 
-    const [p1] = await Promise.all([checkWebp(), Promise.resolve(img.onload())])
+    const [p1] = await Promise.all([checkWebpSupported(), Promise.resolve(img.onload())])
     expect(p1).toBe(true)
 
-    const [p2] = await Promise.all([checkWebp(), Promise.resolve(img.onerror())])
+    const [p2] = await Promise.all([checkWebpSupported(), Promise.resolve(img.onerror())])
     expect(p2).toBe(false)
+
+    win.Image = FormerImage
+  })
+
+  test('set cross origin', async () => {
+    const win: any = window as any
+    const FormerImage = win.Image
+    let img: any
+    win.Image = function () {
+      img = this
+      img.height = 1
+    }
+
+    await Promise.all([waitImgLoaded('src', 'Anonymous'), Promise.resolve(img.onload())])
+    expect(img.crossOrigin).toBe('Anonymous')
 
     win.Image = FormerImage
   })
