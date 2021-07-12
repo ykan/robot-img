@@ -42,7 +42,7 @@ export interface ImgPureProps {
 
   loadingType?: 'default'
 
-  crossOrigin?: 'Anonymous' | string
+  crossOrigin?: 'anonymous' | 'use-credentials' | ''
 
   onError?: () => void
 

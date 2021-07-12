@@ -236,6 +236,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   return {
     state,
     className: finalClassName,
+    crossOrigin,
     defaultSrc: finalDefaultSrc,
     errorSrc: finalErrorSrc,
     imgPool: poolRef.current,
@@ -247,5 +248,29 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 
     // for tests
     loadImg,
+  }
+}
+
+export function useImgWithStyle<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref<T>) {
+  const { others: othersWithStyle, state, ...others } = useImg(props, ref)
+  const { style, ...otherProps } = othersWithStyle
+  const finalStyle = React.useMemo(() => {
+    let cssBackgroundImage
+    if (state.src) {
+      cssBackgroundImage = `url(${state.src})`
+    }
+    if (cssBackgroundImage) {
+      return {
+        ...style,
+        backgroundImage: cssBackgroundImage,
+      }
+    }
+    return style
+  }, [state.src, style])
+  return {
+    others: otherProps,
+    style: finalStyle,
+    state,
+    ...others,
   }
 }

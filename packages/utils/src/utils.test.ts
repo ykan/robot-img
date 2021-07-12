@@ -181,8 +181,8 @@ describe('测试 checkWebp && waitImgLoaded', () => {
       img.height = 1
     }
 
-    await Promise.all([waitImgLoaded('src', 'Anonymous'), Promise.resolve(img.onload())])
-    expect(img.crossOrigin).toBe('Anonymous')
+    await Promise.all([waitImgLoaded('src', 'anonymous'), Promise.resolve(img.onload())])
+    expect(img.crossOrigin).toBe('anonymous')
 
     win.Image = FormerImage
   })

@@ -53,7 +53,7 @@ export function getContainerRect(
  * @param crossOrigin 参考：https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_enabled_image
  * @returns Promise<HTMLImageElement>
  */
-export function waitImgLoaded(imgSrc: string, crossOrigin?: 'Anonymous' | string) {
+export function waitImgLoaded(imgSrc: string, crossOrigin?: 'anonymous' | 'use-credentials' | '') {
   const { Image } = window
   const img: HTMLImageElement = new Image()
   if (crossOrigin) {

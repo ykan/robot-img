@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dom 快照 1`] = `
+Array [
+  <img
+    className="g-img"
+    src="src"
+  />,
+  <div
+    className="g-img"
+    style={
+      Object {
+        "backgroundImage": "url(ssss)",
+      }
+    }
+  />,
+  <span
+    className="g-img"
+    style={
+      Object {
+        "backgroundImage": "url(ssss)",
+      }
+    }
+  />,
+]
+`;

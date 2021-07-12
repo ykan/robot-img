@@ -4,7 +4,7 @@ import { createImgPool, waitImgLoaded } from '@robot-img/utils'
 import { act, renderHook } from '@testing-library/react-hooks'
 
 import { imgPool, ImgPoolContext } from './ImgPoolContext'
-import { useImg } from './useImg'
+import { useImg, useImgWithStyle } from './useImg'
 
 jest.mock('@robot-img/utils', () => {
   return {
@@ -209,5 +209,25 @@ describe('测试一些跟 imgPool 有关的情况', () => {
     })
 
     expect(result.current.className).toBe('a b-loaded g-img')
+  })
+})
+
+describe('useImgWithStyle', () => {
+  test('src === ""，那么 style 不变，传进来是啥就是啥', () => {
+    const imgEl = window.document.createElement('div')
+    const imgRef = React.createRef<HTMLDivElement>()
+    const { result, rerender } = renderHook(({ src }: any = {}) =>
+      useImgWithStyle({ src, lazy: false }, imgRef)
+    )
+    result.current.handleRef!(imgEl)
+
+    rerender({ src: '' })
+
+    expect(result.current.style).toBe(undefined)
+
+    rerender({ src: 'src' })
+    expect(result.current.style).toEqual({
+      backgroundImage: 'url(src)',
+    })
   })
 })
