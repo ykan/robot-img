@@ -127,6 +127,38 @@ describe('scroll & resize', () => {
     await waitForNextUpdate()
     expect(overlap).toHaveBeenCalledTimes(2)
   })
+
+  test('设置了 lazy="resize" 那么只要发生了 resize 事件都会检测', async () => {
+    const imgEl = window.document.createElement('div')
+    const imgRef = React.createRef<HTMLDivElement>()
+    const pool = createImgPool({ name: 'pool', tickTime: 100 })
+    const overlap = jest.spyOn(pool, 'overlap')
+    overlap.mockReturnValue(true)
+
+    const wrapper = ({ children }: any) => {
+      return <ImgPoolContext.Provider value={pool}>{children}</ImgPoolContext.Provider>
+    }
+    const { result, rerender, waitForNextUpdate } = renderHook(
+      ({ src, lazy }: any = {}) => useImg({ src, lazy }, imgRef),
+      {
+        wrapper,
+      }
+    )
+    result.current.handleRef!(imgEl)
+
+    rerender({ src: 'src', lazy: 'resize' })
+    expect(overlap).toHaveBeenCalledTimes(1)
+    await waitTime(10)
+
+    pool.occur('resize')
+    const getBoundingClientRect = jest.spyOn(imgEl, 'getBoundingClientRect')
+    const newRect = { width: 10, height: 10 }
+    getBoundingClientRect.mockReturnValue(newRect as DOMRect)
+
+    await waitForNextUpdate()
+    expect(overlap).toHaveBeenCalledTimes(1)
+    expect(getBoundingClientRect).toHaveBeenCalledTimes(1)
+  })
 })
 
 describe('测试当图片设置了 loading 时的情况', () => {

@@ -170,20 +170,17 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 
   const lazyCheckFn: ImgItem['onChecked'] = React.useCallback(async () => {
     imgItemRef.current.shouldCheck = false
+    /* istanbul ignore next */
     if (!imgRef.current) {
       return
     }
     const rect = imgRef.current.getBoundingClientRect()
     if (poolRef.current.overlap(rect)) {
       loadImg(rect)
-      if (lazy === 'resize') {
-        imgItemRef.current.shouldCheck = true
-        imgItemRef.current.onChecked = resizeCheckFn
-      }
     } else {
       imgItemRef.current.shouldCheck = true
     }
-  }, [lazy, loadImg, resizeCheckFn])
+  }, [loadImg])
 
   React.useEffect(() => {
     // 当图片节点不存在时，不进行任何操作
@@ -210,6 +207,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     }
 
     // 执行第一次检测，如果不在容器区域范围内，等待下一次检测事件发生
+    // 这里不需要考虑 lazy="resize" 的情况，没加载必然都要进行检测
     if (!poolRef.current.overlap(rect)) {
       imgItemRef.current.shouldCheck = true
       imgItemRef.current.onChecked = lazyCheckFn
@@ -217,21 +215,23 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     }
 
     loadImg(rect)
-
-    if (lazy === 'resize') {
-      imgItemRef.current.shouldCheck = true
-      imgItemRef.current.onChecked = resizeCheckFn
-    }
   }, [
     lazy,
-    loadImg,
-    resizeCheckFn,
     lazyCheckFn,
+    loadImg,
     src,
     state.originSrc,
+    state.rect,
     state.status,
     update2DefaultSrc,
   ])
+
+  React.useEffect(() => {
+    if (state.status === 'loaded' && lazy === 'resize') {
+      imgItemRef.current.shouldCheck = true
+      imgItemRef.current.onChecked = resizeCheckFn
+    }
+  }, [lazy, resizeCheckFn, state.status])
 
   return {
     state,
