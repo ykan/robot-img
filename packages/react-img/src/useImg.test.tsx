@@ -166,7 +166,7 @@ describe('测试当图片设置了 loading 时的情况', () => {
     const imgEl = window.document.createElement('div')
     const imgRef = React.createRef<HTMLDivElement>()
     const onLoaded = jest.fn()
-    const { result } = renderHook(() => useImg({ onLoaded, loadingType: 'default' }, imgRef))
+    const { result } = renderHook(() => useImg({ onLoaded, loadingType: 'src' }, imgRef))
 
     await act(async () => {
       await Promise.all([
@@ -181,7 +181,7 @@ describe('测试当图片设置了 loading 时的情况', () => {
     const imgEl = window.document.createElement('div')
     const imgRef = React.createRef<HTMLDivElement>()
     const onError = jest.fn()
-    const { result } = renderHook(() => useImg({ onError, loadingType: 'default' }, imgRef))
+    const { result } = renderHook(() => useImg({ onError, loadingType: 'src' }, imgRef))
     ;(waitImgLoaded as jest.Mock).mockRejectedValue({})
 
     await act(async () => {

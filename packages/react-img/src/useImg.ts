@@ -28,7 +28,9 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     shouldCheck: false,
     onChecked: async () => {},
   })
+  // 当在 useMemo 中时，用 imgPool ，因为值要随 imgPool 变更
   const imgPool = React.useContext(ImgPoolContext)
+  // 当在一些函数中时，由于 ref 肯定更新了，用 poolRef ，这样 hooks 里少一次对比
   const poolRef = React.useRef(imgPool)
   // 当 context 变了，更新 pool
   if (poolRef.current !== imgPool) {
@@ -40,12 +42,16 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     return imgPool.srcTpl(srcTpl)
   }, [srcTpl, imgPool])
   const finalDefaultSrc = React.useMemo(
-    () => defaultSrc || poolRef.current.globalVars.defaultImgSrc || '',
-    [defaultSrc]
+    () => defaultSrc || imgPool.globalVars.defaultSrc || '',
+    [defaultSrc, imgPool]
   )
   const finalErrorSrc = React.useMemo(
-    () => errorSrc || poolRef.current.globalVars.defaultErrorImgSrc || '',
-    [errorSrc]
+    () => errorSrc || imgPool.globalVars.errorSrc || '',
+    [errorSrc, imgPool]
+  )
+  const finalLoadingType = React.useMemo(
+    () => loadingType || imgPool.globalVars.loadingType,
+    [loadingType, imgPool]
   )
 
   const [state, setState] = React.useState<ImgState>({
@@ -69,14 +75,16 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     }
     return classes.join(' ')
   }, [className, state.status, statusClassNamePrefix, imgPool])
-  // --- 更新状态相关的函数 ---
+
+  // 异步更新 src ，状态变更可能会 loading -> loaded 或者 loading -> error
+
   const loadingPromise = React.useRef<Promise<any>>()
-  const loadImgWithDefaultImg = React.useCallback(
+  const loadImgWithStatus = React.useCallback(
     (rect: DOMRect) => {
       const finalSrc = imgSrcTplFn({ src, rect })
 
       setState({
-        src: finalDefaultSrc,
+        src: finalLoadingType === 'src' ? finalDefaultSrc : '',
         originSrc: src,
         status: 'loading',
         rect,
@@ -86,17 +94,17 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 
       // 保证执行最后一次函数执行的变更
       currentPromise
-        .catch(() => {
+        .catch((reason) => {
           if (loadingPromise.current !== currentPromise) {
             return
           }
           setState({
-            src: finalErrorSrc,
+            src: finalLoadingType === 'src' ? finalErrorSrc : '',
             originSrc: src,
             status: 'error',
             rect,
           })
-          onError?.()
+          onError?.(reason)
         })
         .then((imgObj) => {
           if (loadingPromise.current !== currentPromise) {
@@ -111,7 +119,16 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
           onLoaded?.(imgObj!)
         })
     },
-    [crossOrigin, finalDefaultSrc, finalErrorSrc, imgSrcTplFn, onError, onLoaded, src]
+    [
+      crossOrigin,
+      finalDefaultSrc,
+      finalErrorSrc,
+      finalLoadingType,
+      imgSrcTplFn,
+      onError,
+      onLoaded,
+      src,
+    ]
   )
   const loadImgSync = React.useCallback(
     async (rect: DOMRect) => {
@@ -126,22 +143,11 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   )
 
   const loadImg = React.useMemo(() => {
-    if (loadingType === 'default') {
-      return loadImgWithDefaultImg
+    if (loadingType) {
+      return loadImgWithStatus
     }
     return loadImgSync
-  }, [loadImgWithDefaultImg, loadImgSync, loadingType])
-
-  // 使用默认图片
-  const update2DefaultSrc = React.useCallback(() => {
-    setState({
-      src: finalDefaultSrc,
-      originSrc: src,
-      status: 'loaded',
-    })
-  }, [finalDefaultSrc, src])
-
-  // +++ 更新状态相关的函数 +++
+  }, [loadImgWithStatus, loadImgSync, loadingType])
 
   React.useEffect(() => {
     // 把当前图片实例放入到 imgPool 中
@@ -193,9 +199,13 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
       return
     }
 
-    // 如果 src 要设置为 '' ，那么使用默认图片
+    // 如果 src 要设置为 '' ，那么设置为默认状态
     if (src === '') {
-      update2DefaultSrc()
+      setState({
+        src: '',
+        originSrc: '',
+        status: 'blank',
+      })
       return
     }
 
@@ -215,16 +225,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     }
 
     loadImg(rect)
-  }, [
-    lazy,
-    lazyCheckFn,
-    loadImg,
-    src,
-    state.originSrc,
-    state.rect,
-    state.status,
-    update2DefaultSrc,
-  ])
+  }, [lazy, lazyCheckFn, loadImg, src, state.originSrc, state.rect, state.status])
 
   React.useEffect(() => {
     if (state.status === 'loaded' && lazy === 'resize') {

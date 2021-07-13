@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "test": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage",
-    "test:last": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage --changedSince origin/master",
+    "test:last": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage --changedSince origin/main",
     "test:clear": "BABEL_ENV=test jest --clearCache",
     "test:debug": "BABEL_ENV=test node --inspect-brk node_modules/.bin/jest --runInBand packages/react-img/src/useImg.test.tsx",
     "test:watch": "BABEL_ENV=test jest --watch --verbose --coverage",
@@ -34,8 +34,6 @@
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.14.5",
-    "@snowpack/plugin-react-refresh": "^2.5.0",
-    "@snowpack/plugin-typescript": "^1.2.1",
     "@testing-library/react-hooks": "^7.0.1",
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
@@ -55,7 +53,6 @@
     "lint-staged": ">=10",
     "prettier": "2.3.2",
     "react-test-renderer": "^17.0.2",
-    "snowpack": "^3.7.1",
     "typescript": "^4.3.4"
   },
   "lint-staged": {

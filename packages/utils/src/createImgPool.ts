@@ -8,8 +8,7 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
     container = window,
     tickTime,
     containerRectFn,
-    srcTpl,
-    srcTplGlobalVars,
+    createSrcTpl: argCreateSrcTpl,
     globalVars,
     name,
   } = opts
@@ -24,9 +23,7 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
   let innerTickTime = tickTime || 150
   let innerContainer = container
   let innerGlobalVars = globalVars || {}
-  let innerSrcTplGlobalVars = srcTplGlobalVars
-  let innerSrcTpl = srcTpl
-  let finalSrcTpl = createSrcTpl(innerSrcTpl, innerSrcTplGlobalVars)
+  let finalSrcTpl = createSrcTpl(argCreateSrcTpl)
   let innerName = name ? `${name}_${uid++}` : `${uid++}`
   const innerImgs: Set<ImgItem> = new Set()
 
@@ -69,21 +66,15 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       if (newOpts.containerRectFn) {
         innerContainerRectFn = newOpts.containerRectFn
       }
-      if (newOpts.srcTplGlobalVars) {
-        innerSrcTplGlobalVars = newOpts.srcTplGlobalVars
+      if (newOpts.createSrcTpl) {
+        finalSrcTpl = createSrcTpl(newOpts.createSrcTpl)
       }
-      if (newOpts.srcTpl) {
-        innerSrcTpl = newOpts.srcTpl
-      }
-      if (newOpts.srcTpl || newOpts.srcTplGlobalVars) {
-        finalSrcTpl = createSrcTpl(innerSrcTpl, innerSrcTplGlobalVars)
+      if (newOpts.name) {
+        innerName = `${newOpts.name}_${uid++}`
       }
       if (newOpts.container) {
         innerContainer = newOpts.container
         innerContainerRect = getContainerRect(newOpts.container, innerContainerRectFn)
-      }
-      if (newOpts.name) {
-        innerName = `${name}_${uid++}`
       }
       // 注意：如果只是改函数，容器没有变，那么也得更新一下
       if (newOpts.containerRectFn && !newOpts.container) {
@@ -100,7 +91,6 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
         instance.occur('scroll')
       }
       const resizeHandler = () => {
-        shouldUpdateContainerRect = true
         instance.occur('resize')
       }
       innerContainer.addEventListener('scroll', scrollHandler, true)
@@ -126,6 +116,10 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
         currentEventType = 'scroll+resize'
       } else if (eventType !== currentEventType) {
         currentEventType = eventType
+      }
+
+      if (currentEventType === 'resize' || currentEventType === 'scroll+resize') {
+        shouldUpdateContainerRect = true
       }
     },
 

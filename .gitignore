@@ -111,3 +111,4 @@ dist
 build
 packages/*/types
 package-lock.json
+*.tsbuildinfo

@@ -1,16 +1,23 @@
 export type ImgRect = Pick<DOMRect, 'top' | 'bottom' | 'left' | 'right'>
 
 export type ImgEventType = 'scroll' | 'resize' | 'scroll+resize'
+
+/**
+ * src tpl 全局设置
+ */
 export interface ImgSrcTplGlobals {
+  /** 是否使用 webp 格式的图片 */
   webp: boolean
+  /** 设备像素比 */
   ratio: number
 }
 
 export interface ImgSrcTplFnArgs {
+  /** 对应 dom 节点的 DOMRect */
   rect: DOMRect
+  /** img.src */
   src: string
 }
-
 export interface ImgSrcTplPropFnArgs extends ImgSrcTplGlobals, ImgSrcTplFnArgs {
   /** 返回按比例放大图片的 width */
   ratioWidth: number
@@ -25,11 +32,18 @@ export type ImgSrcTplRenderFn = (attrs: ImgSrcTplFnArgs) => string
 /** 全局设置时的类型 */
 export type ImgSrcTpl = (srcTpl?: ImgSrcTplPropFn) => ImgSrcTplRenderFn
 
+/** 全局 srcTpl 工厂 */
+export type ImgSrcTplFactory = (
+  globalVars?: ImgSrcTplGlobals
+) => [ImgSrcTplRenderFn, ImgSrcTplGlobals]
+
 export interface ImgPoolGlobals {
   /** 全局默认图片 */
-  defaultImgSrc?: string
+  defaultSrc?: string
   /** 图片加载出错时的全局默认设置图片 */
-  defaultErrorImgSrc?: string
+  errorSrc?: string
+  /** 默认加载设置 */
+  loadingType?: 'src' | 'css'
   /** 全局样式名 */
   className?: string
   /** 图片不同状态下的样式名前缀 */
@@ -43,8 +57,7 @@ export interface ImgPoolOptions {
   /** 设置需要检测的容器区域 */
   containerRectFn?: (rect: DOMRect) => ImgRect
   tickTime?: number
-  srcTpl?: ImgSrcTplRenderFn
-  srcTplGlobalVars?: ImgSrcTplGlobals
+  createSrcTpl?: ImgSrcTplFactory
   globalVars?: ImgPoolGlobals
   name?: string
 }

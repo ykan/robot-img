@@ -14,6 +14,9 @@ function setRef<T>(
   }
 }
 
+/**
+ * modify from: https://github.com/mui-org/material-ui/blob/1e31878744e0816763f4de7e2c63f42f23859148/packages/material-ui-utils/src/useForkRef.ts
+ */
 export function useForkRef<T>(refA: React.Ref<T>, refB: React.Ref<T>) {
   /**
    * This will create a new function if the ref props change and are defined.
@@ -21,9 +24,12 @@ export function useForkRef<T>(refA: React.Ref<T>, refB: React.Ref<T>) {
    * with the ref. Cleanup naturally emerges from this behavior
    */
   return React.useMemo(() => {
-    if (!refA && !refB) {
+    /* eslint-disable */
+    if (refA == null && refB == null) {
       return null
     }
+    /* eslint-enable */
+
     return (refValue: T) => {
       setRef(refA, refValue)
       setRef(refB, refValue)

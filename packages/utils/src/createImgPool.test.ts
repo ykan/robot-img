@@ -43,6 +43,19 @@ describe('tick & occur', () => {
     expect(pool.currentEventType).toBe('resize')
     pool.occur('scroll')
     expect(pool.currentEventType).toBe('scroll+resize')
+    pool.occur('scroll')
+    expect(pool.currentEventType).toBe('scroll+resize')
+  })
+
+  test('当发生 resize 时，再下一次心跳更新 containerRect', () => {
+    const containerRectFn = jest.fn(() => ({ top: 0, bottom: 10, left: 0, right: 10 }))
+
+    pool.reset({
+      containerRectFn,
+    })
+    pool.occur('resize')
+    pool.update()
+    expect(containerRectFn).toHaveBeenCalledTimes(2)
   })
 })
 
@@ -52,7 +65,11 @@ describe('init & reset', () => {
     pool.reset({ tickTime: 10 })
     expect(pool.tickTime).toBe(10)
   })
-  test('global src tpl', () => {
+  test('reset name', () => {
+    pool.reset({ name: 'custom' })
+    expect(pool.name.includes('custom')).toBe(true)
+  })
+  test('reset createSrcTpl', () => {
     const mockRect = {
       width: 100,
       height: 100,
@@ -63,7 +80,19 @@ describe('init & reset', () => {
         rect: mockRect as DOMRect,
       })
     ).toBe('src')
+
+    pool.reset({
+      createSrcTpl: () => [() => 'new src tpl', { webp: false, ratio: 1 }],
+    })
+
+    expect(
+      pool.srcTpl()({
+        src: 'src',
+        rect: mockRect as DOMRect,
+      })
+    ).toBe('new src tpl')
   })
+
   test('reset container', () => {
     const container = window.document.createElement('div')
     const spy = jest.spyOn(container, 'getBoundingClientRect')
@@ -99,13 +128,7 @@ describe('init & reset', () => {
 })
 
 describe('check imgs', () => {
-  const pool = createImgPool({
-    srcTpl: 'ali-oss',
-    srcTplGlobalVars: {
-      webp: false,
-      ratio: 1,
-    },
-  })
+  const pool = createImgPool()
   test('当没有图片需要检测时，不做任何处理', () => {
     pool.imgs.add({
       shouldCheck: false,
