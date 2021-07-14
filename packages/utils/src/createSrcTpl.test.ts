@@ -5,7 +5,6 @@ import {
   createSrcTplOfQiniu,
   createSrcTplOfTencent,
 } from './createSrcTpl'
-import { ImgSrcTplFactory } from './types'
 
 describe('默认情况', () => {
   const srcTpl = createSrcTpl()
@@ -37,8 +36,7 @@ describe('默认情况', () => {
   })
 
   test('自定义全局默认处理函数', () => {
-    const factory: ImgSrcTplFactory = () => [() => 'src1', { webp: false, ratio: 1 }]
-    const globalSrcTpl = createSrcTpl(factory)
+    const globalSrcTpl = createSrcTpl(() => [() => 'src1', { webp: false, ratio: 1 }])
     expect(
       globalSrcTpl()({
         src: 'src',
@@ -53,7 +51,7 @@ describe('测试阿里云的图片处理', () => {
     const [tpl] = createSrcTplOfAliOss({
       webp: true,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 100,
       height: 100,
@@ -66,7 +64,7 @@ describe('测试阿里云的图片处理', () => {
     const [tpl] = createSrcTplOfAliOss({
       webp: false,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 0,
       height: 100,
@@ -81,7 +79,7 @@ describe('测试金山云的图片处理', () => {
     const [tpl] = createSrcTplOfKSYunKS3({
       webp: true,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 100,
       height: 100,
@@ -94,7 +92,7 @@ describe('测试金山云的图片处理', () => {
     const [tpl] = createSrcTplOfKSYunKS3({
       webp: false,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 0,
       height: 100,
@@ -109,7 +107,7 @@ describe('测试七牛云的图片处理', () => {
     const [tpl] = createSrcTplOfQiniu({
       webp: true,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 100,
       height: 100,
@@ -122,7 +120,7 @@ describe('测试七牛云的图片处理', () => {
     const [tpl] = createSrcTplOfQiniu({
       webp: false,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 0,
       height: 100,
@@ -137,7 +135,7 @@ describe('测试腾讯云的图片处理', () => {
     const [tpl] = createSrcTplOfTencent({
       webp: true,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 100,
       height: 100,
@@ -149,7 +147,7 @@ describe('测试腾讯云的图片处理', () => {
     const [tpl] = createSrcTplOfTencent({
       webp: false,
       ratio: 1.5,
-    })
+    })()
     const mockRect = {
       width: 0,
       height: 100,

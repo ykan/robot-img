@@ -1,4 +1,4 @@
-import { ImgPoolOptions, ImgRect } from './types'
+import type { ImgPoolOptions, ImgRect } from './types'
 
 /**
  * 检查两个矩形是否相交

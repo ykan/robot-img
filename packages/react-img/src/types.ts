@@ -1,6 +1,6 @@
-import React from 'react'
+import type React from 'react'
 
-import { ImgSrcTplPropFn } from '@robot-img/utils'
+import type { ImgSrcTplPropFn } from '@robot-img/utils'
 
 export interface ImgState {
   /** 真实使用的 src */

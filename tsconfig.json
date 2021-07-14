@@ -33,6 +33,7 @@
     // "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
 
     /* Additional Checks */
+    "skipLibCheck": true,
     "noUnusedLocals": true /* Report errors on unused locals. */,
     "noUnusedParameters": false /* Report errors on unused parameters. */,
     // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
@@ -45,8 +46,9 @@
     /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     "paths": {
       "@robot-img/react-img": ["packages/react-img/src"],
-      "@robot-img/vue-img": ["packages/vue-img/src"],
-      "@robot-img/utils": ["packages/utils/src"]
+      "@robot-img/utils": ["packages/utils/src"],
+      "@img": ["packages/react-img/src"],
+      "@utils": ["packages/utils/src"]
     },
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
@@ -55,6 +57,7 @@
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
 
+    "importsNotUsedAsValues": "error",
     /* Source Map Options */
     // "sourceRoot": "",                      /* Specify the location where debugger should locate TypeScript files instead of source locations. */
     // "mapRoot": "",                         /* Specify the location where debugger should locate map files instead of generated locations. */

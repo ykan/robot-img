@@ -3,9 +3,9 @@ import React from 'react'
 import { ImgItem, waitImgLoaded } from '@robot-img/utils'
 
 import { ImgPoolContext } from './ImgPoolContext'
-import { ImgProps, ImgState } from './types'
 import { useForkRef } from './useForkRef'
 
+import type { ImgProps, ImgState } from './types'
 export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref<T>) {
   const {
     src = '',

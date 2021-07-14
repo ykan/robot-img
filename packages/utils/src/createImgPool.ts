@@ -1,7 +1,7 @@
 import { createSrcTpl } from './createSrcTpl'
-import { ImgEventType, ImgItem, ImgPool, ImgPoolOptions } from './types'
 import { getContainerRect, overlap } from './utils'
 
+import type { ImgEventType, ImgItem, ImgPool, ImgPoolOptions } from './types'
 let uid = 0
 export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
   const {

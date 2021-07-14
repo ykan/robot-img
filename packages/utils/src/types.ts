@@ -33,9 +33,8 @@ export type ImgSrcTplRenderFn = (attrs: ImgSrcTplFnArgs) => string
 export type ImgSrcTpl = (srcTpl?: ImgSrcTplPropFn) => ImgSrcTplRenderFn
 
 /** 全局 srcTpl 工厂 */
-export type ImgSrcTplFactory = (
-  globalVars?: ImgSrcTplGlobals
-) => [ImgSrcTplRenderFn, ImgSrcTplGlobals]
+export type ImgSrcTplFactoryResult = () => [ImgSrcTplRenderFn, ImgSrcTplGlobals]
+export type ImgSrcTplFactory = (globalVars?: ImgSrcTplGlobals) => ImgSrcTplFactoryResult
 
 export interface ImgPoolGlobals {
   /** 全局默认图片 */
@@ -57,7 +56,7 @@ export interface ImgPoolOptions {
   /** 设置需要检测的容器区域 */
   containerRectFn?: (rect: DOMRect) => ImgRect
   tickTime?: number
-  createSrcTpl?: ImgSrcTplFactory
+  createSrcTpl?: ImgSrcTplFactoryResult
   globalVars?: ImgPoolGlobals
   name?: string
 }
