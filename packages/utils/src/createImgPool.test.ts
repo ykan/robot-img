@@ -128,49 +128,33 @@ describe('init & reset', () => {
 })
 
 describe('check imgs', () => {
-  const pool = createImgPool()
-  test('当没有图片需要检测时，不做任何处理', () => {
-    pool.imgs.add({
+  test('根据 shouldCheck 来判断是否需要执行 onChecked', () => {
+    const pool = createImgPool()
+    const onChecked = jest.fn()
+    const img = {
       shouldCheck: false,
-      onChecked: async () => {},
-    })
-    pool.checkImgs('scroll')
-    pool.imgs.clear()
-  })
-  test('检测图片', (done) => {
-    const img = {
-      shouldCheck: true,
-      checkType: 'scroll',
-      onChecked: async () => {
-        img.shouldCheck = false
-      },
+      onChecked: onChecked,
     }
-
-    const onChecked = jest.spyOn(img, 'onChecked')
     pool.imgs.add(img)
-    pool.occur('scroll')
-    pool.checkImgs('scroll', () => {
-      done()
-      pool.checkImgs('scroll')
-      expect(onChecked).toBeCalledTimes(1)
-      pool.imgs.clear()
-    })
+    pool.checkImgs('scroll')
+    expect(onChecked).toHaveBeenCalledTimes(0)
+    img.shouldCheck = true
+    pool.checkImgs('scroll')
+    expect(onChecked).toHaveBeenCalledTimes(1)
   })
 
-  test('检测图片时出错', (done) => {
+  test('检测图片时出错', () => {
+    const pool = createImgPool()
+    const onError = jest.fn()
     const img = {
       shouldCheck: true,
-      checkType: 'scroll',
-      onChecked: async () => {
-        img.shouldCheck = false
+      onChecked: () => {
         throw new Error('ss')
       },
+      onError,
     }
     pool.imgs.add(img)
-    pool.occur('scroll')
-    pool.checkImgs('scroll', () => {
-      done()
-      pool.imgs.clear()
-    })
+    pool.checkImgs('scroll')
+    expect(onError).toHaveBeenCalledTimes(1)
   })
 })

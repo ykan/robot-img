@@ -138,7 +138,7 @@ describe('scroll & resize', () => {
     const wrapper = ({ children }: any) => {
       return <ImgPoolContext.Provider value={pool}>{children}</ImgPoolContext.Provider>
     }
-    const { result, rerender, waitForNextUpdate } = renderHook(
+    const { result, rerender, waitForNextUpdate, unmount } = renderHook(
       ({ src, lazy }: any = {}) => useImg({ src, lazy }, imgRef),
       {
         wrapper,
@@ -158,6 +158,7 @@ describe('scroll & resize', () => {
     await waitForNextUpdate()
     expect(overlap).toHaveBeenCalledTimes(1)
     expect(getBoundingClientRect).toHaveBeenCalledTimes(1)
+    unmount()
   })
 })
 

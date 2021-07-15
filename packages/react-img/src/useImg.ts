@@ -1,4 +1,5 @@
 import React from 'react'
+import warning from 'warning'
 
 import { ImgItem, waitImgLoaded } from '@robot-img/utils'
 
@@ -26,7 +27,14 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   // 要保障整个生命周期只有一个引用
   const imgItemRef = React.useRef<ImgItem>({
     shouldCheck: false,
-    onChecked: async () => {},
+    onChecked: () => {},
+    onError: (reason) => {
+      let msg = '.'
+      if (reason) {
+        msg = `, msg[${reason.toString()}]`
+      }
+      warning(false, `[RobotImg]: occur error when checking${msg}`)
+    },
   })
   // 当在 useMemo 中时，用 imgPool ，因为值要随 imgPool 变更
   const imgPool = React.useContext(ImgPoolContext)
@@ -159,12 +167,13 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 
   const resizeCheckFn: ImgItem['onChecked'] = React.useCallback(
     async (eventType) => {
+      // 额外保障，逻辑正常的话，不应该会走到这
+      /* istanbul ignore next */
+      if (!imgRef.current) {
+        return
+      }
       // 如果有 resize 事件发生，那么要检测一下当前节点的大小有没有发生变化
-      if (
-        (eventType === 'resize' || eventType === 'scroll+resize') &&
-        imgRef.current &&
-        state.rect
-      ) {
+      if ((eventType === 'resize' || eventType === 'scroll+resize') && state.rect) {
         const rect = imgRef.current.getBoundingClientRect()
         if (rect.width !== state.rect.width || rect.height !== state.rect.height) {
           loadImg(rect)
@@ -174,8 +183,9 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     [loadImg, state.rect]
   )
 
-  const lazyCheckFn: ImgItem['onChecked'] = React.useCallback(async () => {
+  const lazyCheckFn: ImgItem['onChecked'] = React.useCallback(() => {
     imgItemRef.current.shouldCheck = false
+    // 额外保障，逻辑正常的话，不应该会走到这
     /* istanbul ignore next */
     if (!imgRef.current) {
       return
@@ -228,9 +238,13 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   }, [lazy, lazyCheckFn, loadImg, src, state.originSrc, state.rect, state.status])
 
   React.useEffect(() => {
-    if (state.status === 'loaded' && lazy === 'resize') {
+    if (state.status === 'loaded' && lazy === 'resize' && imgRef.current) {
       imgItemRef.current.shouldCheck = true
       imgItemRef.current.onChecked = resizeCheckFn
+      poolRef.current.observe(imgRef.current)
+      return () => {
+        poolRef.current.unobserve(imgRef.current!)
+      }
     }
   }, [lazy, resizeCheckFn, state.status])
 

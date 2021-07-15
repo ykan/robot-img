@@ -17,6 +17,9 @@
     "lazyload",
     "img"
   ],
+  "dependencies": {
+    "resize-observer-polyfill": "^1.5.1"
+  },
   "author": "ykan",
   "license": "MIT",
   "bugs": {

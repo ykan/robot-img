@@ -54,7 +54,7 @@ export function getContainerRect(
  * @returns Promise<HTMLImageElement>
  */
 export function waitImgLoaded(imgSrc: string, crossOrigin?: 'anonymous' | 'use-credentials' | '') {
-  const { Image } = window
+  const { Image } = window // 写在里面有一个好处：在测试代码里更容易 mock
   const img: HTMLImageElement = new Image()
   if (crossOrigin) {
     img.crossOrigin = crossOrigin

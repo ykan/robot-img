@@ -1,5 +1,7 @@
+import ResizeObserver from 'resize-observer-polyfill'
+
 import { createSrcTpl } from './createSrcTpl'
-import { getContainerRect, overlap } from './utils'
+import { getContainerRect, isWindow, overlap } from './utils'
 
 import type { ImgEventType, ImgItem, ImgPool, ImgPoolOptions } from './types'
 let uid = 0
@@ -13,9 +15,9 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
     name,
   } = opts
 
+  // 内部变量
   let tickTimer = -1
   let currentEventType: ImgEventType | 'none' = 'none'
-  let isChecking = false
   let shouldUpdateContainerRect = false
   let innerContainerRect = getContainerRect(container, containerRectFn)
   let innerContainerRectFn = containerRectFn
@@ -25,6 +27,7 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
   let innerGlobalVars = globalVars || {}
   let finalSrcTpl = createSrcTpl(argCreateSrcTpl)
   let innerName = name ? `${name}_${uid++}` : `${uid++}`
+  let innerResizeObserver: ResizeObserver
   const innerImgs: Set<ImgItem> = new Set()
 
   const instance: ImgPool = {
@@ -55,6 +58,14 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       return innerName
     },
 
+    observe(element) {
+      return innerResizeObserver.observe(element)
+    },
+
+    unobserve(element) {
+      return innerResizeObserver.unobserve(element)
+    },
+
     srcTpl(srcTpl) {
       return finalSrcTpl(srcTpl)
     },
@@ -83,10 +94,10 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       if (newOpts.globalVars) {
         innerGlobalVars = newOpts.globalVars
       }
-      instance.destroy()
       instance.init()
     },
     init() {
+      instance.destroy()
       const scrollHandler = () => {
         instance.occur('scroll')
       }
@@ -94,10 +105,20 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
         instance.occur('resize')
       }
       innerContainer.addEventListener('scroll', scrollHandler, true)
-      innerContainer.addEventListener('resize', resizeHandler)
-      destroyFn = () => {
-        innerContainer.removeEventListener('scroll', scrollHandler, true)
-        innerContainer.removeEventListener('resize', resizeHandler)
+      innerResizeObserver = new ResizeObserver(resizeHandler)
+      if (isWindow(innerContainer)) {
+        innerContainer.addEventListener('resize', resizeHandler)
+        destroyFn = () => {
+          innerContainer.removeEventListener('scroll', scrollHandler, true)
+          innerContainer.removeEventListener('resize', resizeHandler)
+          innerResizeObserver.disconnect()
+        }
+      } else {
+        innerResizeObserver.observe(innerContainer)
+        destroyFn = () => {
+          innerContainer.removeEventListener('scroll', scrollHandler, true)
+          innerResizeObserver.disconnect()
+        }
       }
     },
     destroy() {
@@ -123,22 +144,18 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       }
     },
 
-    checkImgs(eventType, done) {
-      const checkPromises: Promise<void>[] = []
+    checkImgs(eventType) {
       innerImgs.forEach((img) => {
-        if (img.shouldCheck) {
-          checkPromises.push(img.onChecked(eventType))
+        if (!img.shouldCheck) {
+          return
+        }
+        // 需要保障检测不被意外中断
+        try {
+          img.onChecked(eventType)
+        } catch (error) {
+          img.onError?.(error)
         }
       })
-      if (checkPromises.length) {
-        isChecking = true
-        return Promise.all(checkPromises)
-          .catch(() => {})
-          .finally(() => {
-            isChecking = false
-            done?.()
-          })
-      }
     },
 
     update() {
@@ -148,7 +165,7 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       }
       // 即没发生滚动，也没发生变形，那么啥也不干
       // 正在检测也啥都不干
-      if (currentEventType === 'none' || isChecking) {
+      if (currentEventType === 'none') {
         return
       }
       instance.checkImgs(currentEventType)

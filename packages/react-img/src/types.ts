@@ -81,3 +81,6 @@ type OmitPropsDefault = 'crossOrigin' | 'onError' | 'onLoaded'
 
 export type ImgProps<T extends HTMLElement = HTMLElement> = ImgPureProps &
   Omit<React.HTMLAttributes<T>, OmitPropsDefault>
+
+// snowpack bug
+const _SNOWPACK_ = true

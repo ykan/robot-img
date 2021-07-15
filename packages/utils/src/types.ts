@@ -1,3 +1,5 @@
+import type ResizeObserver from 'resize-observer-polyfill'
+
 export type ImgRect = Pick<DOMRect, 'top' | 'bottom' | 'left' | 'right'>
 
 export type ImgEventType = 'scroll' | 'resize' | 'scroll+resize'
@@ -61,7 +63,7 @@ export interface ImgPoolOptions {
   name?: string
 }
 
-export interface ImgPool {
+export interface ImgPool extends Pick<ResizeObserver, 'observe' | 'unobserve'> {
   readonly imgs: Set<ImgItem>
   readonly currentEventType: ImgEventType | 'none'
   readonly containerRect: ImgRect
@@ -85,7 +87,7 @@ export interface ImgPool {
   destroy: () => void
 
   /** 执行一遍检测 */
-  checkImgs: (eventType: ImgEventType, done?: () => void) => void
+  checkImgs: (eventType: ImgEventType) => void
 
   /** 发生了某个事件 */
   occur: (type: ImgEventType) => void
@@ -105,5 +107,11 @@ export interface ImgItem {
   shouldCheck: boolean
 
   /** 触发检测时调用 */
-  onChecked: (event: ImgEventType) => Promise<void>
+  onChecked: (event: ImgEventType) => void
+
+  /** 检测出错时调用 */
+  onError?: (reason: any) => void
 }
+
+// snowpack bug
+const _SNOWPACK_ = true
