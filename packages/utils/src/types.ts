@@ -34,7 +34,7 @@ export type ImgSrcTpl = (srcTpl?: ImgSrcTplPropFn) => ImgSrcTplRenderFn
 
 /** 全局 srcTpl 工厂 */
 export type ImgSrcTplFactoryResult = () => [ImgSrcTplRenderFn, ImgSrcTplGlobals]
-export type ImgSrcTplFactory = (globalVars?: ImgSrcTplGlobals) => ImgSrcTplFactoryResult
+export type ImgSrcTplFactory = (globalVars?: Partial<ImgSrcTplGlobals>) => ImgSrcTplFactoryResult
 
 export interface ImgPoolGlobals {
   /** 全局默认图片 */
@@ -55,9 +55,13 @@ export interface ImgPoolOptions {
   container?: Window | HTMLElement
   /** 设置需要检测的容器区域 */
   getContainerRect?: (rect: DOMRect) => ImgRect
+  /** 心跳间隔时间，单位 ms */
   tickTime?: number
+  /** 全局的 srcTpl 设置 */
   createSrcTpl?: ImgSrcTplFactoryResult
+  /** 一些全局变量 */
   globalVars?: ImgPoolGlobals
+  /** 名字，用于一些问题的排查 */
   name?: string
 }
 
@@ -71,6 +75,7 @@ export interface ImgPool {
   readonly name: string
   readonly isOverlapWindow: boolean
 
+  /** src 模板 */
   srcTpl: ImgSrcTpl
 
   /** 判断图片所在矩形区域与容器区域是否有重叠 */

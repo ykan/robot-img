@@ -6,4 +6,5 @@ export {
   createSrcTplOfKSYunKS3,
   createSrcTplOfQiniu,
   createSrcTplOfTencent,
+  createSrcTplFactory,
 } from './createSrcTpl'

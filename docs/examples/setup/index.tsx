@@ -8,12 +8,13 @@ import { checkWebpSupported, createSrcTplOfAliOss } from '@robot-img/utils'
 const Container = styled.div`
   max-width: 960px;
   margin: 0 auto;
-`
+  padding: 10px;
 
-const ExampleImg = styled(Img.Div)`
-  width: 100px;
-  height: 60px;
-  background-size: cover;
+  .robot-img {
+    width: 400px;
+    height: 320px;
+    background-size: cover;
+  }
 `
 
 async function main() {
@@ -21,13 +22,15 @@ async function main() {
   imgPool.reset({
     createSrcTpl: createSrcTplOfAliOss({
       webp,
-      ratio: window.devicePixelRatio || 1,
     }),
+    globalVars: {
+      className: 'robot-img',
+    },
   })
   ReactDOM.render(
     <React.StrictMode>
       <Container>
-        <ExampleImg src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg" />
+        <Img.Div src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg" />
       </Container>
     </React.StrictMode>,
     document.getElementById('root')

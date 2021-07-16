@@ -1,6 +1,6 @@
 import type React from 'react'
 
-import type { ImgSrcTplPropFn } from '@robot-img/utils'
+import type { ImgSrcTplPropFn, ImgPool, ImgPoolOptions } from '@robot-img/utils'
 
 export interface ImgState {
   /** 真实使用的 src */
@@ -48,6 +48,12 @@ export interface ImgPureProps {
   lazy?: false | 'scroll' | 'resize'
 
   /**
+   * 当 lazy === 'resize' 时，判断是否要更新图片
+   * 默认当面积变大至少20%，才更新图片
+   */
+  shouldUpdate?: (newRect: DOMRect, oldRect: DOMRect) => boolean
+
+  /**
    * 设置图片为异步加载
    * 这个时候，useImg 返回的 state.status 可能会 blank -> loading -> loaded 或者 blank -> loading -> error
    * 当 loadingType === 'src' 时，状态会体现在 state.src 上，
@@ -82,5 +88,21 @@ type OmitPropsDefault = 'crossOrigin' | 'onError' | 'onLoaded'
 export type ImgProps<T extends HTMLElement = HTMLElement> = ImgPureProps &
   Omit<React.HTMLAttributes<T>, OmitPropsDefault>
 
+export type ImgContainerProps = Omit<ImgPoolOptions, 'container'> &
+  React.HTMLAttributes<HTMLDivElement>
+
 // snowpack bug
 const _SNOWPACK_ = true
+
+type ImgComponent<T extends HTMLElement = HTMLElement> = React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ImgProps<T>> & React.RefAttributes<T>
+>
+
+export declare const ImgDiv: ImgComponent<HTMLDivElement>
+export declare const ImgSpan: ImgComponent<HTMLSpanElement>
+export declare const Img: ImgComponent<HTMLImageElement> & {
+  Div: ImgComponent<HTMLDivElement>
+  Span: ImgComponent<HTMLSpanElement>
+}
+export declare const imgPool: ImgPool
+export declare const ImgPoolContext: React.Context<ImgPool>

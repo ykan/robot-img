@@ -6,6 +6,15 @@ import { ImgPoolContext } from './ImgPoolContext'
 import { useForkRef } from './useForkRef'
 
 import type { ImgProps, ImgState } from './types'
+
+function defaultShouldUpdate(newRect: DOMRect, oldRect: DOMRect) {
+  const newArea = newRect.width * newRect.height
+  const oldArea = oldRect.width * oldRect.height
+
+  // 当面积变大 20% 时，才更新图片
+  return newArea > oldArea * 1.2
+}
+
 export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref<T>) {
   const {
     src = '',
@@ -19,6 +28,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     crossOrigin,
     onError,
     onLoaded,
+    shouldUpdate = defaultShouldUpdate,
     ...others
   } = props
   const imgRef = React.useRef<T>(null)
@@ -165,11 +175,11 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
       if (!poolRef.current.overlap(rect)) {
         return
       }
-      if (rect.width !== state.rect.width || rect.height !== state.rect.height) {
+      if (shouldUpdate(rect, state.rect)) {
         loadImg(rect)
       }
     }
-  }, [loadImg, state.rect])
+  }, [loadImg, shouldUpdate, state.rect])
 
   const lazyCheckFn: ImgItem['onChecked'] = React.useCallback(() => {
     imgItemRef.current.shouldCheck = false
