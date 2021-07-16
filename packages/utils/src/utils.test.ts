@@ -1,4 +1,4 @@
-import { checkWebpSupported, getContainerRect, isWindow, overlap, waitImgLoaded } from './utils'
+import { checkWebpSupported, isWindow, overlap, waitImgLoaded } from './utils'
 
 describe('测试 overlap', () => {
   const container = {
@@ -123,33 +123,10 @@ describe('测试 overlap', () => {
   })
 })
 
-describe('测试 getContainerRect', () => {
+describe('测试 isWindow', () => {
   test('isWindow', () => {
     expect(isWindow(window)).toBe(true)
     expect(isWindow({})).toBe(false)
-  })
-  test('getContainerRect of window', () => {
-    expect(getContainerRect()).toEqual({
-      top: -window.innerHeight * 0.5,
-      bottom: window.innerHeight * 1.5,
-      left: -window.innerWidth * 0.5,
-      right: window.innerWidth * 1.5,
-    })
-    // console.log(window.innerHeight)
-    // console.log(getContainerRect(window))
-  })
-  test('getContainerRect of element', () => {
-    const el = {
-      getBoundingClientRect() {
-        return { bottom: 300, height: 200, left: 0, right: 200, top: 100, width: 200 }
-      },
-    }
-    expect(getContainerRect(el as HTMLElement)).toEqual({
-      top: 0,
-      bottom: 400,
-      left: -100,
-      right: 300,
-    })
   })
 })
 

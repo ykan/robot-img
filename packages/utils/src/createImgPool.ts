@@ -1,15 +1,34 @@
-import ResizeObserver from 'resize-observer-polyfill'
-
 import { createSrcTpl } from './createSrcTpl'
-import { getContainerRect, isWindow, overlap } from './utils'
+import { isWindow, overlap } from './utils'
 
-import type { ImgEventType, ImgItem, ImgPool, ImgPoolOptions } from './types'
+import type { ImgEventType, ImgItem, ImgPool, ImgPoolOptions, ImgRect } from './types'
 let uid = 0
-export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
+
+function getWinRect() {
+  const rect = {
+    top: 0,
+    bottom: window.innerHeight,
+    left: 0,
+    right: window.innerWidth,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }
+  return rect as DOMRect
+}
+
+function defaultGetContainerRect(rect: DOMRect) {
+  return {
+    top: rect.top - rect.height * 0.5,
+    bottom: rect.bottom + rect.height * 0.5,
+    left: rect.left - rect.width * 0.5,
+    right: rect.right + rect.width * 0.5,
+  }
+}
+export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPool {
   const {
     container = window,
     tickTime,
-    containerRectFn,
+    getContainerRect = defaultGetContainerRect,
     createSrcTpl: argCreateSrcTpl,
     globalVars,
     name,
@@ -18,16 +37,16 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
   // 内部变量
   let tickTimer = -1
   let currentEventType: ImgEventType | 'none' = 'none'
-  let shouldUpdateContainerRect = false
-  let innerContainerRect = getContainerRect(container, containerRectFn)
-  let innerContainerRectFn = containerRectFn
+  let innerContainerRect: ImgRect
   let destroyFn = () => {}
   let innerTickTime = tickTime || 150
   let innerContainer = container
+  let innerGetContainerRect = getContainerRect
   let innerGlobalVars = globalVars || {}
   let finalSrcTpl = createSrcTpl(argCreateSrcTpl)
   let innerName = name ? `${name}_${uid++}` : `${uid++}`
-  let innerResizeObserver: ResizeObserver
+  let innerIsOverlapWindow = false
+  let innerOverlapWindowCheck = () => {}
   const innerImgs: Set<ImgItem> = new Set()
 
   const instance: ImgPool = {
@@ -58,12 +77,8 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       return innerName
     },
 
-    observe(element) {
-      return innerResizeObserver.observe(element)
-    },
-
-    unobserve(element) {
-      return innerResizeObserver.unobserve(element)
+    get isOverlapWindow() {
+      return innerIsOverlapWindow
     },
 
     srcTpl(srcTpl) {
@@ -74,8 +89,8 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       if (newOpts.tickTime) {
         innerTickTime = newOpts.tickTime
       }
-      if (newOpts.containerRectFn) {
-        innerContainerRectFn = newOpts.containerRectFn
+      if (newOpts.getContainerRect) {
+        innerGetContainerRect = newOpts.getContainerRect
       }
       if (newOpts.createSrcTpl) {
         finalSrcTpl = createSrcTpl(newOpts.createSrcTpl)
@@ -85,11 +100,6 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       }
       if (newOpts.container) {
         innerContainer = newOpts.container
-        innerContainerRect = getContainerRect(newOpts.container, innerContainerRectFn)
-      }
-      // 注意：如果只是改函数，容器没有变，那么也得更新一下
-      if (newOpts.containerRectFn && !newOpts.container) {
-        innerContainerRect = getContainerRect(newOpts.container, innerContainerRectFn)
       }
       if (newOpts.globalVars) {
         innerGlobalVars = newOpts.globalVars
@@ -104,20 +114,30 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
       const resizeHandler = () => {
         instance.occur('resize')
       }
-      innerContainer.addEventListener('scroll', scrollHandler, true)
-      innerResizeObserver = new ResizeObserver(resizeHandler)
+      window.addEventListener('scroll', scrollHandler, true)
+      window.addEventListener('resize', resizeHandler)
       if (isWindow(innerContainer)) {
-        innerContainer.addEventListener('resize', resizeHandler)
+        innerIsOverlapWindow = true
+        innerOverlapWindowCheck = () => {
+          innerContainerRect = innerGetContainerRect(getWinRect())
+        }
+        innerContainerRect = innerGetContainerRect(getWinRect())
         destroyFn = () => {
-          innerContainer.removeEventListener('scroll', scrollHandler, true)
-          innerContainer.removeEventListener('resize', resizeHandler)
-          innerResizeObserver.disconnect()
+          window.removeEventListener('scroll', scrollHandler, true)
+          window.removeEventListener('resize', resizeHandler)
         }
       } else {
-        innerResizeObserver.observe(innerContainer)
+        innerContainer.addEventListener('scroll', scrollHandler, true)
+        innerContainerRect = innerGetContainerRect(innerContainer.getBoundingClientRect())
+        innerOverlapWindowCheck = () => {
+          const containerRect = (innerContainer as HTMLElement).getBoundingClientRect()
+          innerContainerRect = innerGetContainerRect(containerRect)
+          innerIsOverlapWindow = overlap(getWinRect(), containerRect)
+        }
         destroyFn = () => {
           innerContainer.removeEventListener('scroll', scrollHandler, true)
-          innerResizeObserver.disconnect()
+          window.removeEventListener('scroll', scrollHandler, true)
+          window.removeEventListener('resize', resizeHandler)
         }
       }
     },
@@ -135,40 +155,29 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
         currentEventType = 'scroll+resize'
       } else if (eventType === 'scroll' && currentEventType === 'resize') {
         currentEventType = 'scroll+resize'
-      } else if (eventType !== currentEventType) {
+      } else {
         currentEventType = eventType
       }
-
-      if (currentEventType === 'resize' || currentEventType === 'scroll+resize') {
-        shouldUpdateContainerRect = true
-      }
-    },
-
-    checkImgs(eventType) {
-      innerImgs.forEach((img) => {
-        if (!img.shouldCheck) {
-          return
-        }
-        // 需要保障检测不被意外中断
-        try {
-          img.onChecked(eventType)
-        } catch (error) {
-          img.onError?.(error)
-        }
-      })
     },
 
     update() {
-      if (shouldUpdateContainerRect) {
-        shouldUpdateContainerRect = false
-        innerContainerRect = getContainerRect(innerContainer, innerContainerRectFn)
+      innerOverlapWindowCheck()
+      for (const img of innerImgs) {
+        img.onUpdate?.()
       }
       // 即没发生滚动，也没发生变形，那么啥也不干
       // 正在检测也啥都不干
       if (currentEventType === 'none') {
         return
       }
-      instance.checkImgs(currentEventType)
+      // 如果容器不在窗口内，就不做检测了
+      if (innerIsOverlapWindow) {
+        for (const img of innerImgs) {
+          if (img.shouldCheck) {
+            img.onChecked(currentEventType)
+          }
+        }
+      }
       currentEventType = 'none'
     },
     tick(isStart = false) {
@@ -187,7 +196,9 @@ export function createImgPool(opts: ImgPoolOptions = {}): ImgPool {
   }
 
   instance.init()
-  instance.tick(true)
+  if (autoTick) {
+    instance.tick(true)
+  }
 
   return instance
 }

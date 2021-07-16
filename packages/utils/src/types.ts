@@ -1,5 +1,3 @@
-import type ResizeObserver from 'resize-observer-polyfill'
-
 export type ImgRect = Pick<DOMRect, 'top' | 'bottom' | 'left' | 'right'>
 
 export type ImgEventType = 'scroll' | 'resize' | 'scroll+resize'
@@ -56,14 +54,14 @@ export interface ImgPoolOptions {
   /** 容器节点，也可以是 window */
   container?: Window | HTMLElement
   /** 设置需要检测的容器区域 */
-  containerRectFn?: (rect: DOMRect) => ImgRect
+  getContainerRect?: (rect: DOMRect) => ImgRect
   tickTime?: number
   createSrcTpl?: ImgSrcTplFactoryResult
   globalVars?: ImgPoolGlobals
   name?: string
 }
 
-export interface ImgPool extends Pick<ResizeObserver, 'observe' | 'unobserve'> {
+export interface ImgPool {
   readonly imgs: Set<ImgItem>
   readonly currentEventType: ImgEventType | 'none'
   readonly containerRect: ImgRect
@@ -71,6 +69,7 @@ export interface ImgPool extends Pick<ResizeObserver, 'observe' | 'unobserve'> {
   readonly container: Window | HTMLElement
   readonly globalVars: ImgPoolGlobals
   readonly name: string
+  readonly isOverlapWindow: boolean
 
   srcTpl: ImgSrcTpl
 
@@ -85,9 +84,6 @@ export interface ImgPool extends Pick<ResizeObserver, 'observe' | 'unobserve'> {
 
   /** 销毁 */
   destroy: () => void
-
-  /** 执行一遍检测 */
-  checkImgs: (eventType: ImgEventType) => void
 
   /** 发生了某个事件 */
   occur: (type: ImgEventType) => void
@@ -109,8 +105,8 @@ export interface ImgItem {
   /** 触发检测时调用 */
   onChecked: (event: ImgEventType) => void
 
-  /** 检测出错时调用 */
-  onError?: (reason: any) => void
+  /** 每次心跳时执行 */
+  onUpdate?: () => void
 }
 
 // snowpack bug

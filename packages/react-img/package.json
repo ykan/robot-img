@@ -10,8 +10,7 @@
     "dist"
   ],
   "dependencies": {
-    "@robot-img/utils": "1.0.0",
-    "warning": "^4.0.3"
+    "@robot-img/utils": "1.0.0"
   },
   "peerDependencies": {
     "@types/react": ">=16.9.0",

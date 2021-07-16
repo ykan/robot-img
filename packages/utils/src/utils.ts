@@ -1,4 +1,4 @@
-import type { ImgPoolOptions, ImgRect } from './types'
+import type { ImgRect } from './types'
 
 /**
  * 检查两个矩形是否相交
@@ -20,31 +20,6 @@ export function overlap(rect: ImgRect, container: ImgRect) {
 
 export function isWindow(obj: Window | any): obj is Window {
   return obj === (obj as Window).window
-}
-
-const defaultContainerFn = (rect: DOMRect) => ({
-  top: rect.top - rect.height * 0.5,
-  bottom: rect.bottom + rect.height * 0.5,
-  left: rect.left - rect.width * 0.5,
-  right: rect.right + rect.width * 0.5,
-})
-export function getContainerRect(
-  container: ImgPoolOptions['container'] = window,
-  containerRectFn: ImgPoolOptions['containerRectFn'] = defaultContainerFn
-): ImgRect {
-  if (isWindow(container)) {
-    const rect = {
-      top: 0,
-      bottom: container.innerHeight,
-      left: 0,
-      right: container.innerWidth,
-      width: container.innerWidth,
-      height: container.innerHeight,
-    }
-    return containerRectFn(rect as DOMRect)
-  }
-  const rect = container.getBoundingClientRect()
-  return containerRectFn(rect)
 }
 
 /**

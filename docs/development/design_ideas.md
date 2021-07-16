@@ -9,14 +9,8 @@
 
 但是如果在检测过程中，增加了任务队列怎么办，是否需要继续检测？
 
-## 使用 ResizeObserver
-
-参考：https://groups.google.com/a/chromium.org/g/blink-dev/c/z6ienONUb5A/m/F5-VcUZtBAAJ?pli=1
-
-如果需要兼容，自行引入 'polyfill' ，可以使用：
-
-- [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill)
-- [@juggle/resize-observer](https://github.com/juggle/resize-observer)
+* 检测容器（非 window ）大小是否发生变化
+* 检测容器是否在窗口内
 
 ## 维护图片的 Map
 

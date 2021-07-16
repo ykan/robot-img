@@ -131,7 +131,7 @@ describe('scroll & resize', () => {
   test('设置了 lazy="resize" 那么只要发生了 resize 事件都会检测', async () => {
     const imgEl = window.document.createElement('div')
     const imgRef = React.createRef<HTMLDivElement>()
-    const pool = createImgPool({ name: 'pool', tickTime: 100 })
+    const pool = createImgPool({ name: 'pool', tickTime: 50 })
     const overlap = jest.spyOn(pool, 'overlap')
     overlap.mockReturnValue(true)
 
@@ -150,13 +150,12 @@ describe('scroll & resize', () => {
     expect(overlap).toHaveBeenCalledTimes(1)
     await waitTime(10)
 
-    pool.occur('resize')
     const getBoundingClientRect = jest.spyOn(imgEl, 'getBoundingClientRect')
     const newRect = { width: 10, height: 10 }
     getBoundingClientRect.mockReturnValue(newRect as DOMRect)
 
     await waitForNextUpdate()
-    expect(overlap).toHaveBeenCalledTimes(1)
+    expect(overlap).toHaveBeenCalledTimes(2)
     expect(getBoundingClientRect).toHaveBeenCalledTimes(1)
     unmount()
   })
