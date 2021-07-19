@@ -8,10 +8,12 @@ export default [
       {
         file: './packages/react-img/dist/react-img.esm-bundler.js',
         format: 'es',
+        sourcemap: true,
       },
       {
         file: './packages/react-img/dist/react-img.js',
         format: 'cjs',
+        sourcemap: true,
       },
     ],
     plugins: [typescript()],
@@ -22,10 +24,12 @@ export default [
       {
         file: './packages/utils/dist/utils.esm-bundler.js',
         format: 'es',
+        sourcemap: true,
       },
       {
         file: './packages/utils/dist/utils.js',
         format: 'cjs',
+        sourcemap: true,
       },
     ],
     plugins: [typescript()],

@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "snowpack dev",
     "tscheck": "tsc --noEmit",
+    "build": "rollup -c rollup.config.js",
     "test": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage",
     "test:last": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage --changedSince origin/main",
     "test:clear": "BABEL_ENV=test jest --clearCache",
