@@ -46,7 +46,6 @@
     "babel-jest": "^27.0.6",
     "babel-plugin-module-resolver": "^4.1.0",
     "commitizen": "^4.2.4",
-    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.29.0",
     "eslint-config-alloy": "^4.1.0",
     "eslint-config-prettier": "^8.3.0",
@@ -67,7 +66,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "./scripts/cz.js"
     }
   },
   "dependencies": {
