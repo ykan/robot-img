@@ -22,12 +22,6 @@ export function isWindow(obj: Window | any): obj is Window {
   return obj === (obj as Window).window
 }
 
-/**
- * 等待图片加载完成
- * @param imgSrc 图片地址
- * @param crossOrigin 参考：https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_enabled_image
- * @returns Promise<HTMLImageElement>
- */
 export function waitImgLoaded(imgSrc: string, crossOrigin?: 'anonymous' | 'use-credentials' | '') {
   const { Image } = window // 写在里面有一个好处：在测试代码里更容易 mock
   const img: HTMLImageElement = new Image()
@@ -45,10 +39,6 @@ export function waitImgLoaded(imgSrc: string, crossOrigin?: 'anonymous' | 'use-c
   })
 }
 
-/**
- * 检测是否可用 webp 格式
- * 正常耗时，低于 1ms
- */
 export async function checkWebpSupported() {
   try {
     await waitImgLoaded(

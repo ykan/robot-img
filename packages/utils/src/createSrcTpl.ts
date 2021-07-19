@@ -47,12 +47,6 @@ export function createSrcTplFactory(
   }
 }
 
-/**
- * 利用阿里云的图片处理功能，使用合适的图片
- * 图片处理文档参考：https://help.aliyun.com/document_detail/44688.html
- * @param globalVars
- * @returns
- */
 export const createSrcTplOfAliOss: ImgSrcTplFactory = createSrcTplFactory(
   (globalVars) =>
     ({ src, rect }) => {
@@ -76,12 +70,6 @@ export const createSrcTplOfAliOss: ImgSrcTplFactory = createSrcTplFactory(
     }
 )
 
-/**
- * 利用金山云的图片处理功能，使用合适的图片
- * 图片处理文档参考：https://docs.ksyun.com/documents/886
- * @param globalVars
- * @returns
- */
 export const createSrcTplOfKSYunKS3: ImgSrcTplFactory = createSrcTplFactory(
   (globalVars) =>
     ({ src, rect }) => {
@@ -105,12 +93,6 @@ export const createSrcTplOfKSYunKS3: ImgSrcTplFactory = createSrcTplFactory(
     }
 )
 
-/**
- * 利用七牛云的图片处理功能，使用合适的图片
- * 图片处理文档参考：https://developer.qiniu.com/dora/1279/basic-processing-images-imageview2
- * @param globalVars
- * @returns
- */
 export const createSrcTplOfQiniu: ImgSrcTplFactory = createSrcTplFactory(
   (globalVars) =>
     ({ src, rect }) => {
@@ -131,12 +113,6 @@ export const createSrcTplOfQiniu: ImgSrcTplFactory = createSrcTplFactory(
     }
 )
 
-/**
- * 利用腾讯云的图片处理功能，使用合适的图片
- * 图片处理文档参考：https://cloud.tencent.com/document/product/460/36541
- * @param globalVars
- * @returns
- */
 export const createSrcTplOfTencent: ImgSrcTplFactory = createSrcTplFactory(
   (globalVars) =>
     ({ src, rect }) => {

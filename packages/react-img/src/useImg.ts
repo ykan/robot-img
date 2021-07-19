@@ -141,7 +141,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     ]
   )
   const loadImgSync = React.useCallback(
-    async (rect: DOMRect) => {
+    (rect: DOMRect) => {
       setState({
         src: imgSrcTplFn({ src, rect }),
         originSrc: src,
@@ -276,9 +276,9 @@ export function useImgWithStyle<T extends HTMLElement>(props: ImgProps<T>, ref: 
     return style
   }, [state.src, style])
   return {
+    ...othersProps,
     othersProps: others,
     style: finalStyle,
     state,
-    ...othersProps,
   }
 }

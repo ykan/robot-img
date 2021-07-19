@@ -2,11 +2,10 @@
   "name": "@robot-img/react-img",
   "version": "1.0.0",
   "description": "robot-img",
-  "main": "index.js",
-  "module": "dist/react-img.esm-bundler.js",
+  "main": "dist/react-img.cjs.js",
+  "module": "dist/react-img.esm.js",
   "types": "dist/react-img.d.ts",
   "files": [
-    "index.js",
     "dist"
   ],
   "dependencies": {

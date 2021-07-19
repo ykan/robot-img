@@ -116,3 +116,67 @@ export interface ImgItem {
 
 // snowpack bug
 export const _SNOWPACK_ = true
+
+// 手写的 ts 类型，用于 ts 类型打包优化
+/**
+ *
+ */
+export declare const createImgPool: (opts?: ImgPoolOptions, autoTick?: boolean) => ImgPool
+
+/**
+ * 检测是否可用 webp 格式
+ * 正常耗时，低于 1ms
+ */
+export declare const checkWebpSupported: () => Promise<boolean>
+
+/**
+ * 等待图片加载完成
+ * @param imgSrc 图片地址
+ * @param crossOrigin 参考：https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_enabled_image
+ * @returns Promise<HTMLImageElement>
+ */
+export declare const waitImgLoaded: (
+  imgSrc: string,
+  crossOrigin?: 'anonymous' | 'use-credentials' | ''
+) => Promise<HTMLImageElement>
+
+/**
+ * 利用阿里云的图片处理功能，使用合适的图片
+ * 图片处理文档参考：https://help.aliyun.com/document_detail/44688.html
+ * @param globalVars
+ * @returns
+ */
+export declare const createSrcTplOfAliOss: ImgSrcTplFactory
+
+/**
+ * 利用金山云的图片处理功能，使用合适的图片
+ * 图片处理文档参考：https://docs.ksyun.com/documents/886
+ * @param globalVars
+ * @returns
+ */
+export declare const createSrcTplOfKSYunKS3: ImgSrcTplFactory
+
+/**
+ * 利用七牛云的图片处理功能，使用合适的图片
+ * 图片处理文档参考：https://developer.qiniu.com/dora/1279/basic-processing-images-imageview2
+ * @param globalVars
+ * @returns
+ */
+export declare const createSrcTplOfQiniu: ImgSrcTplFactory
+
+/**
+ * 利用腾讯云的图片处理功能，使用合适的图片
+ * 图片处理文档参考：https://cloud.tencent.com/document/product/460/36541
+ * @param globalVars
+ * @returns
+ */
+export declare const createSrcTplOfTencent: ImgSrcTplFactory
+
+/**
+ * 创建不同云厂商的图片后缀处理函数
+ * @param (gVars: ImgSrcTplGlobals) => ImgSrcTplRenderFn
+ * @returns
+ */
+export declare const createSrcTplFactory: (
+  factory: (gVars: ImgSrcTplGlobals) => ImgSrcTplRenderFn
+) => ImgSrcTplFactory

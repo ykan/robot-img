@@ -91,18 +91,38 @@ export type ImgProps<T extends HTMLElement = HTMLElement> = ImgPureProps &
 export type ImgContainerProps = Omit<ImgPoolOptions, 'container'> &
   React.HTMLAttributes<HTMLDivElement>
 
+export interface ImgHookResult<T extends HTMLElement = HTMLElement> {
+  state: ImgState
+  className: string
+  crossOrigin?: ImgProps['crossOrigin']
+  defaultSrc: string
+  errorSrc: string
+  imgPool: ImgPool
+  handleRef: ((refValue: T) => void) | null
+  otherProps: Omit<React.HTMLAttributes<T>, OmitPropsDefault | 'className'>
+}
 // snowpack bug
 export const _SNOWPACK_ = true
 
+// 手写的 ts 类型，用于 ts 类型打包优化
 type ImgComponent<T extends HTMLElement = HTMLElement> = React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ImgProps<T>> & React.RefAttributes<T>
 >
 
 export declare const ImgDiv: ImgComponent<HTMLDivElement>
 export declare const ImgSpan: ImgComponent<HTMLSpanElement>
+export declare const ImgContainer: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ImgContainerProps> & React.RefAttributes<HTMLDivElement>
+>
 export declare const Img: ImgComponent<HTMLImageElement> & {
-  Div: ImgComponent<HTMLDivElement>
-  Span: ImgComponent<HTMLSpanElement>
+  Div: typeof ImgDiv
+  Span: typeof ImgSpan
+  Container: typeof ImgContainer
 }
+export declare const useImg: <T extends HTMLElement>(
+  props: ImgProps<T>,
+  ref: React.Ref<T>
+) => ImgHookResult
 export declare const imgPool: ImgPool
 export declare const ImgPoolContext: React.Context<ImgPool>
+export * from '@robot-img/utils'

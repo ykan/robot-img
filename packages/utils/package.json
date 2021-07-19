@@ -2,11 +2,10 @@
   "name": "@robot-img/utils",
   "version": "1.0.0",
   "description": "robot-img",
-  "main": "index.js",
-  "module": "dist/utils.esm-bundler.js",
+  "main": "dist/utils.cjs.js",
+  "module": "dist/utils.esm.js",
   "types": "dist/utils.d.ts",
   "files": [
-    "index.js",
     "dist"
   ],
   "repository": {
