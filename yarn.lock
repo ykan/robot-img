@@ -1519,6 +1519,14 @@
     "@rollup/pluginutils" "^3.1.0"
     magic-string "^0.25.7"
 
+"@rollup/plugin-typescript@^8.2.3":
+  version "8.2.3"
+  resolved "https://registry.nlark.com/@rollup/plugin-typescript/download/@rollup/plugin-typescript-8.2.3.tgz?cache=0&sync_timestamp=1626358676529&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40rollup%2Fplugin-typescript%2Fdownload%2F%40rollup%2Fplugin-typescript-8.2.3.tgz#d1aed5dc424623bad8ff026f13f732e7cbeee175"
+  integrity sha1-0a7V3EJGI7rY/wJvE/cy58vu4XU=
+  dependencies:
+    "@rollup/pluginutils" "^3.1.0"
+    resolve "^1.17.0"
+
 "@rollup/pluginutils@^3.0.4", "@rollup/pluginutils@^3.0.8", "@rollup/pluginutils@^3.1.0":
   version "3.1.0"
   resolved "https://registry.npm.taobao.org/@rollup/pluginutils/download/@rollup/pluginutils-3.1.0.tgz?cache=0&sync_timestamp=1603765619888&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40rollup%2Fpluginutils%2Fdownload%2F%40rollup%2Fpluginutils-3.1.0.tgz#706b4524ee6dc8b103b3c995533e5ad680c02b9b"
@@ -6331,6 +6339,13 @@ rollup@^2.23.0:
   version "2.53.1"
   resolved "https://registry.nlark.com/rollup/download/rollup-2.53.1.tgz?cache=0&sync_timestamp=1625982100088&other_urls=https%3A%2F%2Fregistry.nlark.com%2Frollup%2Fdownload%2Frollup-2.53.1.tgz#b60439efd1eb41bdb56630509bd99aae78b575d3"
   integrity sha1-tgQ579HrQb21ZjBQm9marni1ddM=
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+rollup@^2.53.2:
+  version "2.53.2"
+  resolved "https://registry.nlark.com/rollup/download/rollup-2.53.2.tgz#3279f9bfba1fe446585560802e418c5fbcaefa51"
+  integrity sha1-Mnn5v7of5EZYVWCALkGMX7yu+lE=
   optionalDependencies:
     fsevents "~2.3.2"
 

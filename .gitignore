@@ -112,3 +112,4 @@ build
 packages/*/types
 package-lock.json
 *.tsbuildinfo
+.rollup.cache

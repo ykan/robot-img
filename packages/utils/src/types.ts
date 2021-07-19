@@ -115,4 +115,4 @@ export interface ImgItem {
 }
 
 // snowpack bug
-const _SNOWPACK_ = true
+export const _SNOWPACK_ = true

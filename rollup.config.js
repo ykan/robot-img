@@ -1,0 +1,33 @@
+import typescript from '@rollup/plugin-typescript'
+
+export default [
+  {
+    input: './packages/react-img/src/index.ts',
+    external: ['@robot-img/utils'],
+    output: [
+      {
+        file: './packages/react-img/dist/react-img.esm-bundler.js',
+        format: 'es',
+      },
+      {
+        file: './packages/react-img/dist/react-img.js',
+        format: 'cjs',
+      },
+    ],
+    plugins: [typescript()],
+  },
+  {
+    input: './packages/utils/src/index.ts',
+    output: [
+      {
+        file: './packages/utils/dist/utils.esm-bundler.js',
+        format: 'es',
+      },
+      {
+        file: './packages/utils/dist/utils.js',
+        format: 'cjs',
+      },
+    ],
+    plugins: [typescript()],
+  },
+]

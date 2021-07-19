@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "dev": "snowpack dev",
+    "tscheck": "tsc --noEmit",
     "test": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage",
     "test:last": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage --changedSince origin/main",
     "test:clear": "BABEL_ENV=test jest --clearCache",
@@ -36,6 +37,7 @@
     "@babel/preset-typescript": "^7.14.5",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
+    "@rollup/plugin-typescript": "^8.2.3",
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-typescript": "^1.2.1",
     "@testing-library/react-hooks": "^7.0.1",
@@ -57,12 +59,9 @@
     "lint-staged": ">=10",
     "prettier": "2.3.2",
     "react-test-renderer": "^17.0.2",
+    "rollup": "^2.53.2",
     "snowpack": "^3.7.1",
     "typescript": "^4.3.4"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
-    "*.{js,ts,tsx}": "prettier --write"
   },
   "config": {
     "commitizen": {

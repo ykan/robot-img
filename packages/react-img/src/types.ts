@@ -92,7 +92,7 @@ export type ImgContainerProps = Omit<ImgPoolOptions, 'container'> &
   React.HTMLAttributes<HTMLDivElement>
 
 // snowpack bug
-const _SNOWPACK_ = true
+export const _SNOWPACK_ = true
 
 type ImgComponent<T extends HTMLElement = HTMLElement> = React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ImgProps<T>> & React.RefAttributes<T>
