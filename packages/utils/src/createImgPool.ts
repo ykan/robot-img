@@ -16,6 +16,21 @@ function getWinRect() {
   return rect as DOMRect
 }
 
+function isContainerChange(newRect: ImgRect, oldRect: ImgRect) {
+  const newWidth = newRect.bottom - newRect.top
+  const newHeight = newRect.right - newRect.left
+  const oldWidth = oldRect.bottom - oldRect.top
+  const oldHeight = oldRect.right - oldRect.left
+
+  return newWidth !== oldWidth || newHeight !== oldHeight
+}
+
+/**
+ * 默认的容器检测区域转换函数，会将检测区域的上下左右都扩大一般宽或者高的区域
+ * 比如：如果容器是窗口，那么在垂直方向上，出现在[- window.innerHeight / 2, window.innerHeight * 3 / 2]
+ * @param rect 容器节点的 DOMRect
+ * @returns
+ */
 function defaultGetContainerRect(rect: DOMRect) {
   return {
     top: rect.top - rect.height * 0.5,
@@ -121,19 +136,27 @@ export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPo
         innerOverlapWindowCheck = () => {
           innerContainerRect = innerGetContainerRect(getWinRect())
         }
-        innerContainerRect = innerGetContainerRect(getWinRect())
+        innerOverlapWindowCheck()
         destroyFn = () => {
           window.removeEventListener('scroll', scrollHandler, true)
           window.removeEventListener('resize', resizeHandler)
         }
       } else {
         innerContainer.addEventListener('scroll', scrollHandler, true)
-        innerContainerRect = innerGetContainerRect(innerContainer.getBoundingClientRect())
         innerOverlapWindowCheck = () => {
           const containerRect = (innerContainer as HTMLElement).getBoundingClientRect()
-          innerContainerRect = innerGetContainerRect(containerRect)
+          const newRect = innerGetContainerRect(containerRect)
+
+          // 如果检测发现容器大小也发生变化了，这个时候也应该对所有图片进行一次检测
+          if (isContainerChange(newRect, innerContainerRect)) {
+            instance.occur('resize')
+          }
+          innerContainerRect = newRect
           innerIsOverlapWindow = overlap(getWinRect(), containerRect)
         }
+        const containerRect = innerContainer.getBoundingClientRect()
+        innerContainerRect = innerGetContainerRect(containerRect)
+        innerIsOverlapWindow = overlap(getWinRect(), containerRect)
         destroyFn = () => {
           innerContainer.removeEventListener('scroll', scrollHandler, true)
           window.removeEventListener('scroll', scrollHandler, true)

@@ -29,7 +29,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     onError,
     onLoaded,
     shouldUpdate = defaultShouldUpdate,
-    ...others
+    ...othersProps
   } = props
   const imgRef = React.useRef<T>(null)
   const handleRef = useForkRef(ref, imgRef)
@@ -249,7 +249,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     errorSrc: finalErrorSrc,
     imgPool: poolRef.current,
 
-    others,
+    othersProps,
 
     // 一些处理函数
     handleRef,
@@ -260,8 +260,8 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 }
 
 export function useImgWithStyle<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref<T>) {
-  const { others: othersWithStyle, state, ...others } = useImg(props, ref)
-  const { style, ...otherProps } = othersWithStyle
+  const { othersProps: othersWithStyle, state, ...othersProps } = useImg(props, ref)
+  const { style, ...others } = othersWithStyle
   const finalStyle = React.useMemo(() => {
     let cssBackgroundImage
     if (state.src) {
@@ -276,9 +276,9 @@ export function useImgWithStyle<T extends HTMLElement>(props: ImgProps<T>, ref: 
     return style
   }, [state.src, style])
   return {
-    others: otherProps,
+    othersProps: others,
     style: finalStyle,
     state,
-    ...others,
+    ...othersProps,
   }
 }

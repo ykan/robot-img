@@ -6,7 +6,7 @@ import { Img, ImgContainer, imgPool } from '@robot-img/react-img'
 import { checkWebpSupported, createSrcTplOfAliOss } from '@robot-img/utils'
 
 const Container = styled.div`
-  max-width: 960px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 10px;
 
