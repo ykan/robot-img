@@ -40,28 +40,22 @@ export const ImgContainer = React.forwardRef<HTMLDivElement, ImgContainerProps>(
 })
 
 export const ImgDiv = React.forwardRef<HTMLDivElement, ImgProps<HTMLDivElement>>((props, ref) => {
-  const { handleRef, style, className, othersProps } = useImgWithStyle(props, ref)
-  return <div {...othersProps} className={className} style={style} ref={handleRef} />
+  const { handleRef, domProps } = useImgWithStyle(props, ref)
+  return <div {...domProps} ref={handleRef} />
 })
 
 export const ImgSpan = React.forwardRef<HTMLSpanElement, ImgProps<HTMLSpanElement>>(
   (props, ref) => {
-    const { handleRef, style, className, othersProps } = useImgWithStyle(props, ref)
-    return <span {...othersProps} className={className} style={style} ref={handleRef} />
+    const { handleRef, domProps } = useImgWithStyle(props, ref)
+    return <span {...domProps} ref={handleRef} />
   }
 )
 
 const ImgComponent = React.forwardRef<HTMLImageElement, ImgProps<HTMLImageElement>>(
   (props, ref) => {
-    const { handleRef, crossOrigin, defaultSrc, className, state, othersProps } = useImg(props, ref)
+    const { handleRef, defaultSrc, state, domProps, crossOrigin } = useImg(props, ref)
     return (
-      <img
-        {...othersProps}
-        src={state.src || defaultSrc}
-        className={className}
-        crossOrigin={crossOrigin}
-        ref={handleRef}
-      />
+      <img {...domProps} crossOrigin={crossOrigin} src={state.src || defaultSrc} ref={handleRef} />
     )
   }
 )

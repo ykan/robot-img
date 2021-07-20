@@ -1,6 +1,6 @@
 {
   "name": "@robot-img/utils",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "description": "robot-img",
   "main": "dist/utils.cjs.js",
   "module": "dist/utils.esm.js",
@@ -8,6 +8,7 @@
   "files": [
     "dist"
   ],
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ykan/robot-img.git"

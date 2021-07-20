@@ -63,9 +63,9 @@ export interface ImgPureProps {
    *    - state.status === 'loading' ， state.src = ''
    *    - state.status === 'error'  ， state.src = ''
    * 此时需要根据不同状态下的样式来体现
-   * @default imgPool.globalVars.loadingType 如果不设置取全局默认值
+   * @default imgPool.globalVars.loadingType || 'none' 如果不设置取全局默认值
    */
-  loadingType?: 'src' | 'css'
+  loadingType?: 'src' | 'css' | 'none'
 
   /**
    * 注意当 loadingType 存在时，该属性才会生效
@@ -83,23 +83,38 @@ export interface ImgPureProps {
   onLoaded?: (img: HTMLImageElement) => void
 }
 
-type OmitPropsDefault = 'crossOrigin' | 'onError' | 'onLoaded'
+export type ImgDOMProps<T extends HTMLElement = HTMLElement> = Omit<
+  React.HTMLAttributes<T>,
+  'crossOrigin' | 'onError' | 'onLoaded'
+>
 
-export type ImgProps<T extends HTMLElement = HTMLElement> = ImgPureProps &
-  Omit<React.HTMLAttributes<T>, OmitPropsDefault>
+/** 图片组件的 Props */
+export type ImgProps<T extends HTMLElement = HTMLElement> = ImgPureProps & ImgDOMProps<T>
 
+/** 图片容器组件的 Props */
 export type ImgContainerProps = Omit<ImgPoolOptions, 'container'> &
   React.HTMLAttributes<HTMLDivElement>
 
+/**
+ * useImg 返回值
+ */
 export interface ImgHookResult<T extends HTMLElement = HTMLElement> {
+  /** 组件状态 */
   state: ImgState
+  /** 处理后的 className */
   className: string
+  /** 属性透传 */
   crossOrigin?: ImgProps['crossOrigin']
+  /** 图片默认的 src ，会从 imgPool 和 defaultSrc 属性中取值 */
   defaultSrc: string
+  /** 图片默认出错时的 src ，会从 imgPool 和 errorSrc 属性中取值 */
   errorSrc: string
+  /** 当前使用的 imgPool */
   imgPool: ImgPool
+  /** 获取节点 DOM ref */
   handleRef: ((refValue: T) => void) | null
-  otherProps: Omit<React.HTMLAttributes<T>, OmitPropsDefault | 'className'>
+  /** 处理后的 DOM 节点属性 */
+  domProps: ImgDOMProps<T>
 }
 // snowpack bug
 export const _SNOWPACK_ = true

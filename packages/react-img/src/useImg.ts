@@ -60,7 +60,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     [errorSrc, imgPool]
   )
   const finalLoadingType = React.useMemo(
-    () => loadingType || imgPool.globalVars.loadingType,
+    () => loadingType || imgPool.globalVars.loadingType || 'none',
     [loadingType, imgPool]
   )
 
@@ -153,7 +153,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   )
 
   const loadImg = React.useMemo(() => {
-    if (loadingType) {
+    if (loadingType !== 'none') {
       return loadImgWithStatus
     }
     return loadImgSync
@@ -243,13 +243,15 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 
   return {
     state,
-    className: finalClassName,
-    crossOrigin,
     defaultSrc: finalDefaultSrc,
     errorSrc: finalErrorSrc,
     imgPool: poolRef.current,
 
-    othersProps,
+    crossOrigin,
+    domProps: {
+      ...othersProps,
+      className: finalClassName,
+    },
 
     // 一些处理函数
     handleRef,
@@ -260,7 +262,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 }
 
 export function useImgWithStyle<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref<T>) {
-  const { othersProps: othersWithStyle, state, ...othersProps } = useImg(props, ref)
+  const { domProps: othersWithStyle, state, ...othersProps } = useImg(props, ref)
   const { style, ...others } = othersWithStyle
   const finalStyle = React.useMemo(() => {
     let cssBackgroundImage
@@ -277,8 +279,10 @@ export function useImgWithStyle<T extends HTMLElement>(props: ImgProps<T>, ref: 
   }, [state.src, style])
   return {
     ...othersProps,
-    othersProps: others,
-    style: finalStyle,
+    domProps: {
+      ...others,
+      style: finalStyle,
+    },
     state,
   }
 }

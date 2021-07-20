@@ -201,14 +201,14 @@ describe('测试一些跟 imgPool 有关的情况', () => {
     const { result } = renderHook(() =>
       useImg({ className: 'a', statusClassNamePrefix: 'b-' }, imgRef)
     )
-    expect(result.current.className).toBe('a b-blank')
+    expect(result.current.domProps.className).toBe('a b-blank')
 
     imgPool.reset({ globalVars: { className: 'g-img' } })
     act(() => {
       result.current.loadImg(imgEl.getBoundingClientRect())
     })
 
-    expect(result.current.className).toBe('a b-loaded g-img')
+    expect(result.current.domProps.className).toBe('a b-loaded g-img')
   })
 })
 
@@ -223,10 +223,10 @@ describe('useImgWithStyle', () => {
 
     rerender({ src: '' })
 
-    expect(result.current.style).toBe(undefined)
+    expect(result.current.domProps.style).toBe(undefined)
 
     rerender({ src: 'src' })
-    expect(result.current.style).toEqual({
+    expect(result.current.domProps.style).toEqual({
       backgroundImage: 'url(src)',
     })
   })
