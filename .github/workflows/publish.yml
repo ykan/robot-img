@@ -20,6 +20,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           # Defaults to the user or organization that owns the workflow file
           scope: '@robot-img'
+      - uses: bahmutov/npm-install@v1
       - name: Run build
         run: yarn build
       - name: publish @robot-img/utils
