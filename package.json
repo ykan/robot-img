@@ -10,7 +10,7 @@
     "dev": "snowpack dev",
     "tscheck": "tsc --noEmit",
     "clean": "rimraf packages/**/dist",
-    "build": "rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js",
+    "build": "yarn clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",
     "test": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage",
     "test:last": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage --changedSince origin/main",
     "test:clear": "BABEL_ENV=test jest --clearCache",
