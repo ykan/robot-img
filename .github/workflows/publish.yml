@@ -10,7 +10,7 @@ on:
       - v1.*
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
