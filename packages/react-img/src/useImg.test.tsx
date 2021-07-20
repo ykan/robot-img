@@ -19,6 +19,10 @@ function waitTime(ms: number) {
   })
 }
 
+afterAll(() => {
+  jest.unmock('@robot-img/utils')
+})
+
 describe('测试 useImg 跟 effect 相关的情况', () => {
   test('当 dom 节点不存在时不做任何操作', () => {
     const imgRef = React.createRef<HTMLDivElement>()

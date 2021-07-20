@@ -66,13 +66,21 @@ export interface ImgPoolOptions {
 }
 
 export interface ImgPool {
+  /** 所有图片实例 */
   readonly imgs: Set<ImgItem>
+  /** 当前发生事件类型 */
   readonly currentEventType: ImgEventType | 'none'
+  /** 容器检测区域 */
   readonly containerRect: ImgRect
+  /** 心跳间隔时间 */
   readonly tickTime: number
+  /** 容器节点 */
   readonly container: Window | HTMLElement
+  /** 全局设置 */
   readonly globalVars: ImgPoolGlobals
+  /** 名称 */
   readonly name: string
+  /** 容器如果是 DOM 节点，判断容器是否和 window 有重叠 */
   readonly isOverlapWindow: boolean
 
   /** src 模板 */

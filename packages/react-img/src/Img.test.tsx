@@ -1,25 +1,33 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 
-import { Img, ImgDiv, ImgSpan } from './Img'
+import { Img, ImgContainer, ImgDiv, ImgSpan } from './Img'
 import { useImg, useImgWithStyle } from './useImg'
+import { useImgContainer } from './useImgContainer'
 
 jest.mock('./useImg', () => ({
   useImg: jest.fn(),
   useImgWithStyle: jest.fn(),
 }))
+jest.mock('./useImgContainer', () => ({
+  useImgContainer: jest.fn(),
+}))
 
-test('dom 快照', () => {
+test('img dom 快照', () => {
   ;(useImg as jest.Mock).mockReturnValue({
-    className: 'g-img',
+    domProps: {
+      className: 'g-img',
+    },
     state: {
       src: 'src',
     },
   })
   ;(useImgWithStyle as jest.Mock).mockReturnValue({
-    className: 'g-img',
-    style: {
-      backgroundImage: 'url(ssss)',
+    domProps: {
+      className: 'g-img',
+      style: {
+        backgroundImage: 'url(ssss)',
+      },
     },
     state: {
       src: 'src',
@@ -35,6 +43,16 @@ test('dom 快照', () => {
       </>
     )
     .toJSON()
+
+  expect(tree).toMatchSnapshot()
+})
+
+test('img container 快照', () => {
+  ;(useImgContainer as jest.Mock).mockReturnValue({
+    domProps: {},
+  })
+
+  const tree = renderer.create(<ImgContainer />).toJSON()
 
   expect(tree).toMatchSnapshot()
 })

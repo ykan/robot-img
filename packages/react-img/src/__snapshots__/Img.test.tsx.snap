@@ -1,6 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`dom 快照 1`] = `
+exports[`img container 快照 1`] = `<div />`;
+
+exports[`img dom 快照 1`] = `
 Array [
   <img
     className="g-img"

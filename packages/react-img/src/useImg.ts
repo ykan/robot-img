@@ -59,10 +59,9 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     () => errorSrc || imgPool.globalVars.errorSrc || '',
     [errorSrc, imgPool]
   )
-  const finalLoadingType = React.useMemo(
-    () => loadingType || imgPool.globalVars.loadingType || 'none',
-    [loadingType, imgPool]
-  )
+  const finalLoadingType = React.useMemo(() => {
+    return loadingType || imgPool.globalVars.loadingType || 'none'
+  }, [loadingType, imgPool])
 
   const [state, setState] = React.useState<ImgState>({
     src: '',
@@ -153,11 +152,11 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   )
 
   const loadImg = React.useMemo(() => {
-    if (loadingType !== 'none') {
-      return loadImgWithStatus
+    if (finalLoadingType === 'none') {
+      return loadImgSync
     }
-    return loadImgSync
-  }, [loadImgWithStatus, loadImgSync, loadingType])
+    return loadImgWithStatus
+  }, [loadImgWithStatus, loadImgSync, finalLoadingType])
 
   React.useEffect(() => {
     // 把当前图片实例放入到 imgPool 中
@@ -262,8 +261,8 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 }
 
 export function useImgWithStyle<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref<T>) {
-  const { domProps: othersWithStyle, state, ...othersProps } = useImg(props, ref)
-  const { style, ...others } = othersWithStyle
+  const { domProps, state, ...othersProps } = useImg(props, ref)
+  const { style, ...others } = domProps
   const finalStyle = React.useMemo(() => {
     let cssBackgroundImage
     if (state.src) {

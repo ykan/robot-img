@@ -28,9 +28,9 @@ module.exports = {
   coverageDirectory: './public/coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  // FIXME: Menu 重构先 ignore
   coveragePathIgnorePatterns: [
     '/node_modules/',
+    '.rollup.cache',
     // copy 过来的，就不测了
     '/packages/react-img/src/useForkRef.ts',
   ],

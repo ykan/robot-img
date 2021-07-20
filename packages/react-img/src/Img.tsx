@@ -1,13 +1,10 @@
 import React from 'react'
 
-import { createImgPool } from '@robot-img/utils'
-
 import { ImgPoolContext } from './ImgPoolContext'
-import { useForkRef } from './useForkRef'
 import { useImg, useImgWithStyle } from './useImg'
+import { useImgContainer } from './useImgContainer'
 
 import type { ImgProps, ImgContainerProps } from './types'
-
 function withProperties<A, B>(component: A, properties: B): A & B {
   Object.keys(properties).forEach((key) => {
     ;(component as any)[key] = (properties as any)[key]
@@ -16,25 +13,10 @@ function withProperties<A, B>(component: A, properties: B): A & B {
 }
 
 export const ImgContainer = React.forwardRef<HTMLDivElement, ImgContainerProps>((props, ref) => {
-  const { getContainerRect, tickTime, createSrcTpl, globalVars, name, ...others } = props
-  const containerRef = React.useRef<HTMLDivElement>(null)
-  const handleRef = useForkRef(containerRef, ref)
-  const pool = React.useMemo(() => createImgPool(), [])
-  React.useEffect(() => {
-    if (containerRef.current) {
-      pool.reset({
-        container: containerRef.current,
-        getContainerRect,
-        tickTime,
-        createSrcTpl,
-        globalVars,
-        name,
-      })
-    }
-  }, [createSrcTpl, getContainerRect, globalVars, name, pool, tickTime])
+  const { domProps, handleRef, pool } = useImgContainer(props, ref)
   return (
     <ImgPoolContext.Provider value={pool}>
-      <div {...others} ref={handleRef} />
+      <div {...domProps} ref={handleRef} />
     </ImgPoolContext.Provider>
   )
 })
