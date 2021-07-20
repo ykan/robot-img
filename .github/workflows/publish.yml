@@ -25,10 +25,10 @@ jobs:
       - name: Run build
         run: yarn build
       - name: publish @robot-img/utils
-        run: cd ./packages/utils && yarn publish
+        run: cd ./packages/utils && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: publish @robot-img/react-img
-        run: cd ./packages/react-img && yarn publish
+        run: cd ./packages/react-img && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
