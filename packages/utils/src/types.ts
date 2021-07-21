@@ -122,9 +122,6 @@ export interface ImgItem {
   onUpdate?: () => void
 }
 
-// snowpack bug
-export const _SNOWPACK_ = true
-
 // 手写的 ts 类型，用于 ts 类型打包优化
 /**
  *

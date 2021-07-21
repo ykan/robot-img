@@ -116,8 +116,6 @@ export interface ImgHookResult<T extends HTMLElement = HTMLElement> {
   /** 处理后的 DOM 节点属性 */
   domProps: ImgDOMProps<T>
 }
-// snowpack bug
-export const _SNOWPACK_ = true
 
 // 手写的 ts 类型，用于 ts 类型打包优化
 type ImgComponent<T extends HTMLElement = HTMLElement> = React.ForwardRefExoticComponent<
