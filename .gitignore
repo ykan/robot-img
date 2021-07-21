@@ -103,12 +103,13 @@ jspm_packages/
 # Ignore all local history of files
 .history
 
-### library ###
+### custom ###
 
 lib
 es
 dist
 build
+public
 packages/*/types
 package-lock.json
 *.tsbuildinfo
