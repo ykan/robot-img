@@ -11,8 +11,8 @@ const Container = styled.div`
   padding: 10px;
 
   .robot-img {
-    width: 400px;
-    height: 320px;
+    width: 40vw;
+    height: 30vw;
     background-size: cover;
   }
 `
@@ -30,10 +30,10 @@ async function main() {
   ReactDOM.render(
     <React.StrictMode>
       <Container>
-        <Img.Div src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg" />
+        <Img.Div lazy="resize" src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg" />
       </Container>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById('3-resize')
   )
 }
 

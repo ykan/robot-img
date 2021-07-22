@@ -60,7 +60,7 @@ async function main() {
         </ImgContainer>
       </Container>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById('2-container')
   )
 }
 

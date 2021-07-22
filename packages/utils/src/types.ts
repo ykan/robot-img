@@ -109,6 +109,20 @@ export interface ImgPool {
 
   /** 停止心跳 */
   stopTick: () => void
+
+  /**
+   * 根据 globalVars.className 设置一个全局默认样式
+   * 默认样式为：
+   * ```
+   * .${globalVars.className} {
+   *  transition: background-image .3s;
+   *  background-size: cover;
+   *  background-position: center;
+   *  background-repeat: no-repeat;
+   * }
+   * ```
+   */
+  appendDefaultStyle: () => void
 }
 
 export interface ImgItem {

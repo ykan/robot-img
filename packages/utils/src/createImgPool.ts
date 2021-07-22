@@ -96,6 +96,22 @@ export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPo
       return innerIsOverlapWindow
     },
 
+    appendDefaultStyle() {
+      if (innerGlobalVars.className) {
+        const styles = [
+          'transition: background-image .3s;',
+          '-webkit-transition: background-image .3s;',
+          'background-size: cover;',
+          'background-position: center;',
+          'background-repeat: no-repeat;',
+        ].join(' ')
+        window.document.head.insertAdjacentHTML(
+          'afterbegin',
+          `<style>.${innerGlobalVars.className} { ${styles} }</style>`
+        )
+      }
+    },
+
     srcTpl(srcTpl) {
       return finalSrcTpl(srcTpl)
     },

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 // @ts-check
-const { default: parseFiles } = require('@muya-ui/baozheng-tsdoc')
 
 const fs = require('fs-extra')
 const path = require('path')
@@ -8,51 +7,53 @@ const showdown = require('showdown')
 
 async function main() {
   const workspace = process.cwd()
-  const { types, props } = parseFiles([path.join(workspace, './packages/react-img/src/types.ts')], {
-    tsconfigPath: path.join(workspace, './tsconfig.json'),
-  })
   const converter = new showdown.Converter()
-  const typesContent = types
-    .map((typeItem) => {
-      const typeText =
-        typeItem.typeKind === 'union' ? typeItem.types.join(' | ') : typeItem.types.join(' ')
-      const typeHTML = converter.makeHtml(`\`${typeText}\``)
+  const examplesDir = path.join(workspace, './docs/examples')
+  const indexFile = path.join(workspace, './docs/index.html')
+  const indexMD = await fs.readFile(path.join(workspace, './docs/README.md'), 'utf8')
+  const examples = await fs.readdir(examplesDir)
 
-      const descHTML = converter.makeHtml(typeItem.comment).replace(/[\n\r]/g, '')
-      return `| ${typeItem.name} | ${typeHTML}  | ${descHTML} |`
-    })
-    .join('\n')
+  const scripts = []
+  const demos = []
+  for (const example of examples) {
+    const stat = await fs.stat(path.join(examplesDir, example))
+    const exampleDir = path.join(examplesDir, example)
+    const indexFile = path.join(exampleDir, 'index.tsx')
+    if (stat.isDirectory && fs.existsSync(indexFile)) {
+      scripts.push(`<script type="module" src="./examples/${example}/index.tsx"></script>`)
+      const mdFile = path.join(exampleDir, 'README.md')
+      let demo = `<div id="${example}"></div>`
+      if (fs.existsSync(mdFile)) {
+        const demoMD = await fs.readFile(mdFile, 'utf8')
+        demo = `${converter.makeHtml(demoMD)}\n${demo}`
+      }
+      // const code = await fs.readFile(indexFile, 'utf8')
+      // demo += `<pre><code class="language-tsx">${code}</code></pre>`
+      demos.push(`<div class="container">${demo}</div>`)
+    }
+  }
 
-  const interfacesContent = props
-    .map((prop) => {
-      const propsContent = prop.properties
-        .map((typeItem) => {
-          const typeText =
-            typeItem.typeKind === 'union' ? typeItem.types.join(' | ') : typeItem.types.join(' ')
+  const indexHTML = `
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Robot Img 文档</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+  </head>
+  <body>
+    <div id="nav"></div>
+    <div class="container">
+      ${converter.makeHtml(indexMD)}
+    </div>
 
-          const typeHTML = converter.makeHtml(`\`${typeText}\``)
-          const descHTML = converter.makeHtml(typeItem.comment).replace(/[\n\r]/g, '')
-          return `| ${typeItem.name} | ${typeHTML} | ${typeItem.optional}  | ${descHTML} |`
-        })
-        .join('\n')
-      return `
-### ${prop.name}
-| Property | Type | Optional | Desc |
-| --- | --- | --- | --- |
-${propsContent}
-    `.trim()
-    })
-    .join('\n\n')
-  const apiContent = `# API
-## Types
-| Name | Type | Desc |
-| --- | --- | --- |
-${typesContent}
-
-## Interfaces
-${interfacesContent}
+    ${demos.join('\n')}
+    <script type="module" src="./index.tsx"></script>
+    ${scripts.join('\n')}
+  </body>
+</html>
 `
-  await fs.outputFile(path.join(workspace, 'docs/API.md'), apiContent)
+  await fs.outputFile(indexFile, indexHTML)
 }
 
 main()
