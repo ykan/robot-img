@@ -4,6 +4,8 @@
 const fs = require('fs-extra')
 const path = require('path')
 const showdown = require('showdown')
+const Prism = require('prismjs')
+const loadLanguages = require('prismjs/components/')
 
 async function main() {
   const workspace = process.cwd()
@@ -12,6 +14,7 @@ async function main() {
   const indexFile = path.join(workspace, './docs/index.html')
   const indexMD = await fs.readFile(path.join(workspace, './docs/README.md'), 'utf8')
   const examples = await fs.readdir(examplesDir)
+  loadLanguages(['tsx'])
 
   const scripts = []
   const demos = []
@@ -27,8 +30,10 @@ async function main() {
         const demoMD = await fs.readFile(mdFile, 'utf8')
         demo = `${converter.makeHtml(demoMD)}\n${demo}`
       }
-      // const code = await fs.readFile(indexFile, 'utf8')
-      // demo += `<pre><code class="language-tsx">${code}</code></pre>`
+      const code = await fs.readFile(indexFile, 'utf8')
+      // Returns a highlighted HTML string
+      const html = Prism.highlight(code, Prism.languages.tsx, 'tsx')
+      demo += `<pre class="language-tsx"><code class="language-tsx">${html}</code></pre>`
       demos.push(`<div class="container">${demo}</div>`)
     }
   }
@@ -40,6 +45,7 @@ async function main() {
     <meta charset="utf-8" />
     <title>Robot Img 文档</title>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <link rel="stylesheet" href="../node_modules/prismjs/themes/prism-solarizedlight.css">
   </head>
   <body>
     <div id="nav"></div>

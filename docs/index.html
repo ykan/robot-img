@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <title>Robot Img 文档</title>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <link rel="stylesheet" href="../node_modules/prismjs/themes/prism-solarizedlight.css">
   </head>
   <body>
     <div id="nav"></div>
@@ -17,9 +18,164 @@
     </div>
 
     <div class="container"><h2 id="">全局配置</h2>
-<div id="1-setup"></div></div>
-<div class="container"><div id="2-container"></div></div>
-<div class="container"><div id="3-resize"></div></div>
+<div id="1-setup"></div><pre class="language-tsx"><code class="language-tsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span>
+<span class="token keyword">import</span> ReactDOM <span class="token keyword">from</span> <span class="token string">'react-dom'</span>
+
+<span class="token keyword">import</span> styled <span class="token keyword">from</span> <span class="token string">'@emotion/styled'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+  checkWebpSupported<span class="token punctuation">,</span>
+  createSrcTplOfAliOss<span class="token punctuation">,</span>
+  imgPool<span class="token punctuation">,</span>
+  ImgProps<span class="token punctuation">,</span>
+  useImg<span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@robot-img/react-img'</span>
+
+<span class="token keyword">const</span> StyledImg <span class="token operator">=</span> styled<span class="token punctuation">.</span>div<span class="token operator">&lt;</span><span class="token punctuation">{</span> $src<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span><span class="token operator">></span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 0.3s;
+  </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token punctuation">(</span>props<span class="token punctuation">)</span> <span class="token operator">=></span> props<span class="token punctuation">.</span>$src <span class="token operator">&amp;&amp;</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">background-image: url(</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>props<span class="token punctuation">.</span>$src<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">);</span><span class="token template-punctuation string">`</span></span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">
+</span><span class="token template-punctuation string">`</span></span>
+
+<span class="token keyword">const</span> Img <span class="token operator">=</span> React<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">forwardRef</span><span class="token generic class-name"><span class="token operator">&lt;</span>HTMLDivElement<span class="token punctuation">,</span> ImgProps<span class="token operator">&lt;</span>HTMLDivElement<span class="token operator">>></span></span></span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">props<span class="token punctuation">,</span> ref</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> domProps<span class="token punctuation">,</span> state<span class="token punctuation">,</span> handleRef <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">useImg</span><span class="token punctuation">(</span>props<span class="token punctuation">,</span> ref<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">StyledImg</span></span> <span class="token spread"><span class="token punctuation">{</span><span class="token operator">...</span>domProps<span class="token punctuation">}</span></span> <span class="token attr-name">$src</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>state<span class="token punctuation">.</span>src<span class="token punctuation">}</span></span> <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>handleRef<span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> OssImg <span class="token operator">=</span> <span class="token function">styled</span><span class="token punctuation">(</span>Img<span class="token punctuation">)</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  width: 200px;
+  height: 160px;
+</span><span class="token template-punctuation string">`</span></span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> webp <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">checkWebpSupported</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  imgPool<span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    createSrcTpl<span class="token operator">:</span> <span class="token function">createSrcTplOfAliOss</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      webp<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">OssImg</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token punctuation">,</span>
+    document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'1-setup'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div>
+<div class="container"><div id="2-container"></div><pre class="language-tsx"><code class="language-tsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span>
+<span class="token keyword">import</span> ReactDOM <span class="token keyword">from</span> <span class="token string">'react-dom'</span>
+
+<span class="token keyword">import</span> styled <span class="token keyword">from</span> <span class="token string">'@emotion/styled'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Img<span class="token punctuation">,</span> ImgContainer<span class="token punctuation">,</span> imgPool <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@robot-img/react-img'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> checkWebpSupported<span class="token punctuation">,</span> createSrcTplOfAliOss <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@robot-img/utils'</span>
+
+<span class="token keyword">const</span> Container <span class="token operator">=</span> styled<span class="token punctuation">.</span>div<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 10px;
+
+  .robot-img {
+    width: 40vw;
+    height: 30vw;
+    background-size: cover;
+    margin-bottom: 150vh;
+  }
+  .container {
+    height: 300px;
+    overflow: scroll;
+  }
+  .img {
+    width: 50vw;
+    height: 50vw;
+    background-size: cover;
+  }
+</span><span class="token template-punctuation string">`</span></span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> webp <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">checkWebpSupported</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  imgPool<span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    createSrcTpl<span class="token operator">:</span> <span class="token function">createSrcTplOfAliOss</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      webp<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    globalVars<span class="token operator">:</span> <span class="token punctuation">{</span>
+      className<span class="token operator">:</span> <span class="token string">'robot-img'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Container</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">ImgContainer</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">ImgContainer</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Container</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token punctuation">,</span>
+    document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'2-container'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div>
+<div class="container"><div id="3-resize"></div><pre class="language-tsx"><code class="language-tsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span>
+<span class="token keyword">import</span> ReactDOM <span class="token keyword">from</span> <span class="token string">'react-dom'</span>
+
+<span class="token keyword">import</span> styled <span class="token keyword">from</span> <span class="token string">'@emotion/styled'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Img<span class="token punctuation">,</span> imgPool <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@robot-img/react-img'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> checkWebpSupported<span class="token punctuation">,</span> createSrcTplOfAliOss <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@robot-img/utils'</span>
+
+<span class="token keyword">const</span> Container <span class="token operator">=</span> styled<span class="token punctuation">.</span>div<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 10px;
+
+  .robot-img {
+    width: 40vw;
+    height: 30vw;
+    background-size: cover;
+  }
+</span><span class="token template-punctuation string">`</span></span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> webp <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">checkWebpSupported</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  imgPool<span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    createSrcTpl<span class="token operator">:</span> <span class="token function">createSrcTplOfAliOss</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      webp<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    globalVars<span class="token operator">:</span> <span class="token punctuation">{</span>
+      className<span class="token operator">:</span> <span class="token string">'robot-img'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Container</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Img.Div</span></span> <span class="token attr-name">lazy</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>resize<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Container</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token punctuation">,</span>
+    document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'3-resize'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div>
     <script type="module" src="./index.tsx"></script>
     <script type="module" src="./examples/1-setup/index.tsx"></script>
 <script type="module" src="./examples/2-container/index.tsx"></script>

@@ -4,7 +4,8 @@
   "description": "robot-img",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/react-img",
+    "packages/utils"
   ],
   "scripts": {
     "dev": "vite",
@@ -63,6 +64,7 @@
     "jest": "^27.0.6",
     "lint-staged": ">=10",
     "prettier": "2.3.2",
+    "prismjs": "^1.24.1",
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.53.2",
