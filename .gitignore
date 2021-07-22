@@ -111,6 +111,5 @@ dist
 build
 public
 packages/*/types
-package-lock.json
 *.tsbuildinfo
 .rollup.cache

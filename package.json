@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "snowpack dev",
+    "dev": "vite",
     "tscheck": "tsc --noEmit",
     "clean": "rimraf packages/**/dist",
     "build": "yarn clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",
