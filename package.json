@@ -8,7 +8,7 @@
     "packages/utils"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/doc.js && vite",
     "tscheck": "tsc --noEmit",
     "clean": "rimraf packages/**/dist docs/_site docs/*.html",
     "build": "npm run clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",

@@ -111,6 +111,7 @@ dist
 build
 public
 _site
+docs/*.html
 packages/*/types
 *.tsbuildinfo
 .rollup.cache

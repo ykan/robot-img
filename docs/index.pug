@@ -23,6 +23,8 @@ html
           pre.language-tsx
             code.language-tsx!= demo.code
 
+    .g-footer @robot-img/react-img
+
     each demo in demos
       script(type='module' src=`./examples/${demo.name}/index.tsx`)
 
