@@ -110,6 +110,7 @@ es
 dist
 build
 public
+_site
 packages/*/types
 *.tsbuildinfo
 .rollup.cache
