@@ -198,4 +198,15 @@ describe('init & reset', () => {
     expect(pool.containerRect).toBe(containerRect)
     expect(pool.overlap({ top: 50, bottom: 120, left: 0, right: 50 })).toBe(true)
   })
+
+  test('appendDefaultStyle', () => {
+    const insertAdjacentHTML = jest.spyOn(window.document.head, 'insertAdjacentHTML')
+
+    const pool = createImgPool({}, false)
+    pool.appendDefaultStyle()
+    expect(insertAdjacentHTML).not.toBeCalled()
+    pool.reset({ globalVars: { className: 'img' } })
+    pool.appendDefaultStyle()
+    expect(insertAdjacentHTML).toHaveBeenCalled()
+  })
 })
