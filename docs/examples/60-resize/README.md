@@ -13,3 +13,6 @@ function defaultShouldUpdate(newRect: DOMRect, oldRect: DOMRect) {
 ```
 
 也可以通过给组件传 `shouldUpdate` 来定义图片是否需要更新
+
+
+[Open in codesandbox](https://codesandbox.io/s/niscs)
