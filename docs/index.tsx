@@ -5,9 +5,38 @@ import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 
 const globalStyle = css`
+  body {
+    margin: 0;
+  }
   .container {
     max-width: 960px;
     margin: 0 auto;
+  }
+  .markdown-body {
+    margin-top: 30px;
+  }
+
+  .example-container {
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 12px 0 rgba(102, 102, 102, 0.12);
+    .example {
+      flex: 1;
+      padding: 10px;
+      max-height: 500px;
+    }
+    .code {
+      flex: 2;
+      max-height: 500px;
+      overflow: scroll;
+
+      pre {
+        margin: 0;
+      }
+    }
   }
 `
 

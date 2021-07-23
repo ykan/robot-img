@@ -10,8 +10,9 @@
   "scripts": {
     "dev": "vite",
     "tscheck": "tsc --noEmit",
-    "clean": "rimraf packages/**/dist",
-    "build": "yarn clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",
+    "clean": "rimraf packages/**/dist docs/_site",
+    "build": "npm run clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",
+    "build:doc": "vite build ./docs -c ./vite.config.ts",
     "test": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage",
     "test:last": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage --changedSince origin/main",
     "test:clear": "BABEL_ENV=test jest --clearCache",
@@ -60,6 +61,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "fs-extra": "^10.0.0",
+    "github-markdown-css": "^4.0.0",
     "husky": ">=6",
     "jest": "^27.0.6",
     "lint-staged": ">=10",
@@ -80,6 +82,7 @@
   "dependencies": {
     "@types/react": "^17.0.13",
     "@types/react-dom": "^17.0.8",
+    "normalize.css": "^8.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   }

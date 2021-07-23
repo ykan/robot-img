@@ -12,4 +12,8 @@ export default defineConfig({
       '@robot-img/utils': path.join(__dirname, './packages/utils/src/index.ts'),
     },
   },
+  base: './',
+  build: {
+    outDir: '_site',
+  },
 })

@@ -25,16 +25,17 @@ async function main() {
     if (stat.isDirectory && fs.existsSync(indexFile)) {
       scripts.push(`<script type="module" src="./examples/${example}/index.tsx"></script>`)
       const mdFile = path.join(exampleDir, 'README.md')
-      let demo = `<div id="${example}"></div>`
+      let demo = `<div id="${example}" class="example"></div>`
+      let demoMDHTML = ''
       if (fs.existsSync(mdFile)) {
         const demoMD = await fs.readFile(mdFile, 'utf8')
-        demo = `${converter.makeHtml(demoMD)}\n${demo}`
+        demoMDHTML = `<div class="container markdown-body">${converter.makeHtml(demoMD)}</div>`
       }
       const code = await fs.readFile(indexFile, 'utf8')
       // Returns a highlighted HTML string
       const html = Prism.highlight(code, Prism.languages.tsx, 'tsx')
-      demo += `<pre class="language-tsx"><code class="language-tsx">${html}</code></pre>`
-      demos.push(`<div class="container">${demo}</div>`)
+      demo += `<div class="code"><pre class="language-tsx"><code class="language-tsx">${html}</code></pre></div>`
+      demos.push(`${demoMDHTML}<div class="container example-container">${demo}</div>`)
     }
   }
 
@@ -44,12 +45,13 @@ async function main() {
   <head>
     <meta charset="utf-8" />
     <title>Robot Img 文档</title>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <link rel="stylesheet" href="../node_modules/normalize.css">
+    <link rel="stylesheet" href="../node_modules/github-markdown-css/github-markdown.css">
     <link rel="stylesheet" href="../node_modules/prismjs/themes/prism-solarizedlight.css">
   </head>
   <body>
     <div id="nav"></div>
-    <div class="container">
+    <div class="container markdown-body">
       ${converter.makeHtml(indexMD)}
     </div>
 
