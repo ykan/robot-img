@@ -33,7 +33,7 @@ async function main() {
         <Img.Div lazy="resize" src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg" />
       </Container>
     </React.StrictMode>,
-    document.getElementById('3-resize')
+    document.getElementById('60-resize')
   )
 }
 

@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+}
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.markdown-body {
+  margin-top: 30px;
+}
+
+.example-container {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 12px 0 rgba(102, 102, 102, 0.12);
+}
+
+
+.example-container .example {
+  flex: 1;
+  padding: 10px;
+  max-height: 500px;
+}
+.example-container .code {
+  flex: 2;
+  max-height: 500px;
+  overflow: scroll;
+}
+
+.example-container .code pre {
+  margin: 0;
+}
+
+.g-nav {
+  box-shadow: 0 0 12px 0 rgba(102, 102, 102, 0.12);
+}
+.g-nav:hover {
+  box-shadow: 0 0 12px 0 rgba(102, 102, 102, 0.2);
+}
+
+.g-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.g-nav .menu-item {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+}
+.g-nav .menu-item.active {
+  color: #1A7AF8;
+}
+.interface-title {
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 20px;
+}
+.props-table {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+}
+
+.props-table thead tr {
+  background-color: #1A7AF8;
+  color: #ffffff;
+  text-align: left;
+}
+
+.props-table th,
+.props-table td {
+  padding: 12px 15px;
+}
+.props-table .comment {
+  max-width: 400px;
+  overflow: scroll;
+}
+.props-table .type {
+  color: #c41d7f;
+}
+.props-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.props-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+

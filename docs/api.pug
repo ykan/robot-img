@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+html
+  head
+    meta(charset='utf-8')
+    title Robot Img 文档
+    if cssUrl
+      link(rel="stylesheet" href=cssUrl)
+  body
+    .g-nav
+      .container
+        h1 Robot Img
+        .menu
+          a.menu-item(href='./') 案例
+          a.menu-item.active(href='#') API
+          a.menu-item(href='https://github.com/ykan/robot-img' target='_blank') Github
+
+    .container
+      h2 接口列表
+      each interfaceItem in interfaces
+        if interfaceItem.properties.length
+          .interface-item
+            h3.interface-title= interfaceItem.name
+            .markdown-body!= interfaceItem.comment
+
+            table.props-table
+              thead
+                tr
+                  th Name
+                  th Type
+                  th Optional
+                  th Description
+              tbody
+                each prop in interfaceItem.properties
+                  tr
+                    td= prop.name
+                    if prop.typeKind === 'union'
+                      td.type= prop.types.join(' | ')
+                    else
+                      td.type= prop.types.join('')
+                    td= prop.optional
+                    td.comment.markdown-body!= prop.comment
+
+    if !cssUrl
+      script(type='module' src='./index.ts')
+
+
+

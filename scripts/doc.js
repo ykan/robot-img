@@ -6,62 +6,53 @@ const path = require('path')
 const showdown = require('showdown')
 const Prism = require('prismjs')
 const loadLanguages = require('prismjs/components/')
+const pug = require('pug')
 
 async function main() {
   const workspace = process.cwd()
   const converter = new showdown.Converter()
   const examplesDir = path.join(workspace, './docs/examples')
-  const indexFile = path.join(workspace, './docs/index.html')
+  const indexPug = path.join(workspace, './docs/index.pug')
+  const indexHTML = path.join(workspace, './docs/index.html')
   const indexMD = await fs.readFile(path.join(workspace, './docs/README.md'), 'utf8')
   const examples = await fs.readdir(examplesDir)
   loadLanguages(['tsx'])
 
-  const scripts = []
+  const indexTpl = pug.compileFile(indexPug)
+
+  let introHTML
+  if (fs.existsSync(indexMD)) {
+    const mdContent = await fs.readFile(indexMD, 'utf8')
+    introHTML = converter.makeHtml(mdContent)
+  }
+
   const demos = []
   for (const example of examples) {
     const stat = await fs.stat(path.join(examplesDir, example))
     const exampleDir = path.join(examplesDir, example)
     const indexFile = path.join(exampleDir, 'index.tsx')
     if (stat.isDirectory && fs.existsSync(indexFile)) {
-      scripts.push(`<script type="module" src="./examples/${example}/index.tsx"></script>`)
+      const demoItem = { name: example }
       const mdFile = path.join(exampleDir, 'README.md')
-      let demo = `<div id="${example}" class="example"></div>`
-      let demoMDHTML = ''
       if (fs.existsSync(mdFile)) {
         const demoMD = await fs.readFile(mdFile, 'utf8')
-        demoMDHTML = `<div class="container markdown-body">${converter.makeHtml(demoMD)}</div>`
+        demoItem.mdHTML = converter.makeHtml(demoMD)
       }
       const code = await fs.readFile(indexFile, 'utf8')
       // Returns a highlighted HTML string
-      const html = Prism.highlight(code, Prism.languages.tsx, 'tsx')
-      demo += `<div class="code"><pre class="language-tsx"><code class="language-tsx">${html}</code></pre></div>`
-      demos.push(`${demoMDHTML}<div class="container example-container">${demo}</div>`)
+      demoItem.code = Prism.highlight(code, Prism.languages.tsx, 'tsx')
+      demos.push(demoItem)
     }
   }
 
-  const indexHTML = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <title>Robot Img 文档</title>
-    <link rel="stylesheet" href="../node_modules/normalize.css">
-    <link rel="stylesheet" href="../node_modules/github-markdown-css/github-markdown.css">
-    <link rel="stylesheet" href="../node_modules/prismjs/themes/prism-solarizedlight.css">
-  </head>
-  <body>
-    <div id="nav"></div>
-    <div class="container markdown-body">
-      ${converter.makeHtml(indexMD)}
-    </div>
-
-    ${demos.join('\n')}
-    <script type="module" src="./index.tsx"></script>
-    ${scripts.join('\n')}
-  </body>
-</html>
-`
-  await fs.outputFile(indexFile, indexHTML)
+  await fs.outputFile(
+    indexHTML,
+    indexTpl({
+      introHTML,
+      demos,
+    })
+  )
+  console.log('index.html done.')
 }
 
 main()
