@@ -20,11 +20,7 @@ async function main() {
 
   const indexTpl = pug.compileFile(indexPug)
 
-  let introHTML
-  if (fs.existsSync(indexMD)) {
-    const mdContent = await fs.readFile(indexMD, 'utf8')
-    introHTML = converter.makeHtml(mdContent)
-  }
+  const introHTML = converter.makeHtml(indexMD)
 
   const demos = []
   for (const example of examples) {
