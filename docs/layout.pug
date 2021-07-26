@@ -1,0 +1,31 @@
+mixin nav(inIndex = true)
+  -
+    const indexCls = inIndex ? 'active' : ''
+    const indexUrl = isIndex ? './' : './index.html'
+    const apiCls = inIndex ? '' : 'active'
+
+  .g-nav
+    .container
+      h1 Robot Img
+      .menu
+        a.menu-item(class=indexCls href=indexUrl) 案例
+        a.menu-item(class=apiCls href='./api.html') API
+        a.menu-item(href='https://github.com/ykan/robot-img' target='_blank') Github
+
+
+<!DOCTYPE html>
+html
+  head
+    meta(charset='utf-8')
+    title Robot Img 文档
+    if cssUrl
+      link(rel="stylesheet" href=cssUrl)
+  body
+    block main
+
+    .g-footer @robot-img/react-img
+
+    block scripts
+
+
+

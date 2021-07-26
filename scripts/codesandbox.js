@@ -87,6 +87,7 @@ async function main() {
     const exampleDir = path.join(examplesDir, example)
     const indexFile = path.join(exampleDir, 'index.tsx')
     if (stat.isDirectory && fs.existsSync(indexFile)) {
+      console.log(`生成 ${example} 的 codesandbox 链接...`)
       const mdFile = path.join(exampleDir, 'README.md')
       const code = await fs.readFile(indexFile, 'utf8')
       const id = await addCodesandbox(code.replace(example, 'root'))
@@ -102,7 +103,7 @@ async function main() {
       }
     }
   }
-  console.log('生成 codesandbox 链接')
+  console.log('done.')
 }
 
 main()

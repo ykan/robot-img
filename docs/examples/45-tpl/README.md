@@ -2,3 +2,4 @@
 
 云厂商可用的图片处理不仅仅只有缩放，也可以做一些特殊处理，比如缩放模式、高斯模糊。
 
+[Open in codesandbox](https://codesandbox.io/s/wkk2g)

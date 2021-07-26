@@ -1,38 +1,24 @@
-<!DOCTYPE html>
-html
-  head
-    meta(charset='utf-8')
-    title Robot Img 文档
-  body
-    .g-nav
-      .container
-        h1 Robot Img
-        .menu
-          a.menu-item.active(href='#') 案例
-          a.menu-item(href='./api.html') API
-          a.menu-item(href='https://github.com/ykan/robot-img' target='_blank') Github
+extends layout.pug
 
-    if introHTML
-      .container!= introHTML
+block main
+  +nav
+  if introHTML
+    .container!= introHTML
 
-    each demo in demos
-      .container!= demo.mdHTML
-      .container.example-container
-        .example(id=demo.name)
-        .codesandbox
-          a(href=demo.codesandboxUrl)
-            img(src='https://codesandbox.io/static/media/logo.450f79e2.svg')
-            span Codesandbox
-        .code
-          pre.language-tsx
-            code.language-tsx!= demo.code
+  each demo in demos
+    .container!= demo.mdHTML
+    .container.example-container
+      .example(id=demo.name)
+      .codesandbox
+        a(href=demo.codesandboxUrl)
+          img(src='https://codesandbox.io/static/media/logo.450f79e2.svg')
+          span Codesandbox
+      .code
+        pre.language-tsx
+          code.language-tsx!= demo.code
 
-    .g-footer @robot-img/react-img
+block scripts
+  each demo in demos
+    script(type='module' src=`./examples/${demo.name}/index.tsx`)
 
-    each demo in demos
-      script(type='module' src=`./examples/${demo.name}/index.tsx`)
-
-    script(type='module' src='./index.ts')
-
-
-
+  script(type='module' src='./index.ts')

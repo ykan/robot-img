@@ -72,6 +72,7 @@ body {
   margin-left: 20px;
   text-decoration: none;
   color: #333;
+  font-size: 14px;
 }
 .g-nav .menu-item.active {
   color: #1A7AF8;
