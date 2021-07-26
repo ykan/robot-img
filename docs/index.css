@@ -1,6 +1,12 @@
 body {
   margin: 0;
 }
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -132,27 +138,6 @@ body {
 }
 
 /* copy from: https://github.com/imageslr/typora-theme-lark */
-/*
- * Default theme，适用于 core/mweb-base.scss。
- * 取值参考 chrome 默认样式：
- * https://chromium.googlesource.com/chromium/blink/+/refs/heads/main/Source/core/css/html.css
- * 所有 import "core/mweb-base.scss" 的文件都应该同时导入此变量文件。
- */
-/* color */
-/* font & line */
-/* boxing */
-/* elememts */
-/* color */
-/* prism & pre */
-/* font */
-/* header */
-/* spacing */
-/* table */
-* {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
 .md-body > *:first-child {
   margin-top: 0 !important;
 }
@@ -226,12 +211,6 @@ body {
   margin-left: 0;
   margin-right: 0;
 }
-.md-body pre,
-.md-body xmp,
-.md-body plaintext,
-.md-body listing {
-  font-family: var(--monospace);
-}
 .md-body blockquote > :first-child {
   margin-top: 0;
 }
@@ -259,9 +238,6 @@ body {
   margin-top: 0;
   margin-bottom: 0;
 }
-.md-body .task-list-item {
-  list-style-type: none;
-}
 .md-body a {
   color: #3370ff;
   text-decoration: underline;
@@ -280,11 +256,6 @@ body {
 .md-body address,
 .md-body dfn {
   font-style: italic;
-}
-.md-body kbd,
-.md-body tt,
-.md-body samp {
-  font-family: var(--monospace);
 }
 .md-body mark {
   color: #1f2329;
@@ -374,66 +345,12 @@ body {
 .md-body ul {
   margin-left: 0;
   padding-left: 22px;
-  list-style: none;
-}
-.md-body ul > li:not([class*='task-list-item']) {
-  word-wrap: break-all;
-  padding-left: 0px;
-}
-.md-body ul > li:not([class*='task-list-item']):before {
-  position: absolute;
-  top: 2px;
-  content: '•';
-  color: #3370ff;
-  display: inline-block;
-  margin-left: -20px;
-  margin-right: 20px;
-  width: 0px;
-  font-size: 0.8em;
-  transform: scale(1.25);
-  font-family: PingFangSC-Regular, PingFang SC;
-}
-.md-body ul > li:not([class*='task-list-item']) li:not([class*='task-list-item'])::before {
-  content: '◦';
-  transform: scale(1);
-  font-weight: 700;
-}
-.md-body
-  ul
-  > li:not([class*='task-list-item'])
-  li:not([class*='task-list-item'])
-  li:not([class*='task-list-item'])::before {
-  content: '▪';
-  transform: scale(1.25);
-  font-weight: normal;
 }
 .md-body ol {
   counter-reset: ol_counter;
   margin-left: 0;
   padding-left: 22px;
   list-style: none;
-}
-.md-body ol > li:not([class*='task-list-item']) {
-  word-wrap: break-all;
-  padding-left: 0px;
-  position: relative;
-}
-.md-body ol > li:not([class*='task-list-item']):before {
-  content: counter(ol_counter) '.';
-  counter-increment: ol_counter;
-  color: #3370ff;
-  position: absolute;
-  margin-left: -22px;
-  margin-right: 4px;
-  padding-left: 2px;
-  padding-right: 2px;
-  text-align: left;
-  white-space: nowrap;
-  overflow: visible;
-  min-width: 18px;
-  border-radius: 2px;
-  transform: translateX(-2px);
-  font-family: Helvetica Neue, Consolas;
 }
 .md-body li + li,
 .md-body ul ul,
@@ -443,58 +360,4 @@ body {
 .md-body li ul,
 .md-body li ol {
   margin-top: 4px;
-}
-.md-body .task-list-item {
-  padding-left: 0.3rem;
-}
-.md-body .task-list-item > p {
-  transition: color 0.3s, opacity 0.3s;
-}
-.md-body .task-list-item.task-list-done > p {
-  color: #646a73;
-  text-decoration: line-through;
-}
-.md-body .task-list-item.task-list-done > p > .md-emoji {
-  opacity: 0.5;
-}
-.md-body .task-list-item.task-list-done > p > .md-link > a {
-  opacity: 0.6;
-}
-.md-body .task-list-item > input {
-  -webkit-appearance: initial;
-  display: block;
-  position: absolute;
-  border: 1px solid #2b2f36;
-  border-radius: 0.25rem;
-  margin-left: -1.5rem;
-  height: 1.2rem;
-  width: 1.2rem;
-  transition: border-color 0.3s;
-}
-.md-body .task-list-item > input:focus {
-  outline: none;
-  box-shadow: none;
-}
-.md-body .task-list-item > input:hover {
-  border-color: #3370ff;
-}
-.md-body .task-list-item > input[checked]::before {
-  content: '';
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  height: 60%;
-  width: 2px;
-  transform: rotate(40deg);
-  background: #3370ff;
-}
-.md-body .task-list-item > input[checked]::after {
-  content: '';
-  position: absolute;
-  top: 46%;
-  left: 25%;
-  height: 30%;
-  width: 2px;
-  transform: rotate(-40deg);
-  background: #3370ff;
 }
