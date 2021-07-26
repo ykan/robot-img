@@ -23,12 +23,14 @@ const Container = styled.div`
 
     &-loading {
       border-color: blue;
+      background-size: 64px 64px;
     }
     &-loaded {
       border-color: green;
     }
     &-error {
       border-color: red;
+      background-size: 64px 64px;
     }
   }
   button {
@@ -88,9 +90,8 @@ async function main() {
     globalVars: {
       className: 'ali-oss-img',
       statusClassNamePrefix: 'ali-oss-img-',
-      defaultSrc: '//i.isbase.me/zawlg1lvkg.gif',
-      errorSrc:
-        '//developers.google.cn/maps/documentation/streetview/images/error-image-generic.png',
+      defaultSrc: './imgs/picture.png',
+      errorSrc: './imgs/error.png',
       loadingType: 'src',
     },
   })

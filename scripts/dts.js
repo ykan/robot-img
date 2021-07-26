@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 
 const fs = require('fs-extra')
+const path = require('path')
 
 async function main() {
-  await fs.copy('./packages/react-img/src/types.ts', './packages/react-img/dist/react-img.d.ts')
-  await fs.copy('./packages/utils/src/types.ts', './packages/utils/dist/utils.d.ts')
+  const workspace = process.cwd()
+  const pkgPath = path.join(workspace, 'packages')
+  await fs.copy(
+    path.join(pkgPath, './react-img/src/types.ts'),
+    path.join(pkgPath, './react-img/dist/react-img.d.ts')
+  )
+  await fs.copy(
+    path.join(pkgPath, './utils/src/types.ts'),
+    path.join(pkgPath, './utils/dist/utils.d.ts')
+  )
+  console.log('dts done.')
 }
 
 main()
