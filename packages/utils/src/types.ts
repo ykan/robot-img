@@ -113,7 +113,7 @@ export interface ImgPool {
   /**
    * 根据 globalVars.className 设置一个全局默认样式
    * 默认样式为：
-   * ```
+   * ```css
    * .${globalVars.className} {
    *  transition: background-image .3s;
    *  background-size: cover;

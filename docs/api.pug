@@ -8,7 +8,7 @@ block main
       if interfaceItem.properties.length
         .interface-item
           h3.interface-title= interfaceItem.name
-          div!= interfaceItem.comment
+          .md-body!= interfaceItem.comment
 
           table.props-table
             thead
@@ -20,14 +20,13 @@ block main
             tbody
               each prop in interfaceItem.properties
                 tr
-                  td= prop.name
+                  td.prop-name= prop.name
                   if prop.typeKind === 'union'
-                    td.type= prop.types.join(' | ')
+                    td.prop-type= prop.types.join(' | ')
                   else
-                    td.type= prop.types.join('')
-                  td= prop.optional
-                  td.comment!= prop.comment
-
+                    td.prop-type= prop.types.join('')
+                  td.prop-optional= prop.optional
+                  td.md-body.prop-comment!= prop.comment
 
 block scripts
   if !cssUrl

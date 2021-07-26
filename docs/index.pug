@@ -3,10 +3,10 @@ extends layout.pug
 block main
   +nav
   if introHTML
-    .container!= introHTML
+    .intro-container.container.md-body!= introHTML
 
   each demo in demos
-    .container!= demo.mdHTML
+    .container.md-body!= demo.mdHTML
     .container.example-container
       .example(id=demo.name)
       .codesandbox
