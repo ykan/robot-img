@@ -8,7 +8,6 @@ import {
   createSrcTplFactory,
   createSrcTplOfAliOss,
   createSrcTplOfKSYunKS3,
-  createSrcTplOfQiniu,
   createSrcTplOfTencent,
   Img,
   ImgPoolContext,
@@ -38,15 +37,6 @@ async function main() {
   // 金山云，详见：https://docs.ksyun.com/documents/886
   const imgPoolK3S = createImgPool({
     createSrcTpl: createSrcTplOfKSYunKS3({
-      webp,
-    }),
-    globalVars: {
-      className: 'cloud-img',
-    },
-  })
-  // 七牛，详见：https://developer.qiniu.com/dora/1279/basic-processing-images-imageview2
-  const imgPoolQiniu = createImgPool({
-    createSrcTpl: createSrcTplOfQiniu({
       webp,
     }),
     globalVars: {
@@ -94,9 +84,6 @@ async function main() {
       </ImgPoolContext.Provider>
       <ImgPoolContext.Provider value={imgPoolK3S}>
         <Img src="//ks3-cn-beijing.ksyun.com/ks3-resources/suiyi.jpg" />
-      </ImgPoolContext.Provider>
-      <ImgPoolContext.Provider value={imgPoolQiniu}>
-        <Img src="//7xp4qu.com2.z0.glb.qiniucdn.com/STglr2/avatar/0.jpg" />
       </ImgPoolContext.Provider>
       <ImgPoolContext.Provider value={imgPoolTencent}>
         <Img src="//examples-1251000004.cos.ap-shanghai.myqcloud.com/sample.jpeg" />
