@@ -115,6 +115,7 @@ body {
 }
 .props-table .prop-comment {
   overflow: scroll;
+  max-width: 400px;
 }
 .props-table tbody tr {
   border-bottom: 1px solid #dddddd;
