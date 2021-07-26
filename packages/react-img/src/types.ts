@@ -2,19 +2,6 @@ import type React from 'react'
 
 import type { ImgSrcTplPropFn, ImgPool, ImgPoolOptions } from '@robot-img/utils'
 
-export interface ImgState {
-  /** 真实使用的 src */
-  src: string
-  /** 未处理前的 src */
-  originSrc: string
-  /**
-   * 当前状态
-   */
-  status: 'blank' | 'loading' | 'error' | 'loaded'
-  /** 图片节点的 DOMRect */
-  rect?: DOMRect
-}
-
 export interface ImgPureProps {
   /** 图片地址 */
   src?: string
@@ -94,6 +81,19 @@ export type ImgProps<T extends HTMLElement = HTMLElement> = ImgPureProps & ImgDO
 /** 图片容器组件的 Props */
 export type ImgContainerProps = Omit<ImgPoolOptions, 'container'> &
   React.HTMLAttributes<HTMLDivElement>
+
+export interface ImgState {
+  /** 真实使用的 src */
+  src: string
+  /** 未处理前的 src */
+  originSrc: string
+  /**
+   * 当前状态
+   */
+  status: 'blank' | 'loading' | 'error' | 'loaded'
+  /** 图片节点的 DOMRect */
+  rect?: DOMRect
+}
 
 /**
  * useImg 返回值

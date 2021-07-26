@@ -3,10 +3,24 @@
 
 const fs = require('fs-extra')
 const path = require('path')
-const showdown = require('showdown')
 const pug = require('pug')
 const { default: parseFiles } = require('@muya-ui/baozheng-tsdoc')
+const Prism = require('prismjs')
+const loadLanguages = require('prismjs/components/')
+loadLanguages(['tsx'])
 
+const md = require('markdown-it')({
+  highlight: (str, lang) => {
+    if (lang && Prism.languages[lang]) {
+      const code = Prism.highlight(str, Prism.languages[lang], lang)
+      return `<pre class="language-${lang}"><code class="language-${lang}">${code}</code></pre>`
+    }
+
+    return `<pre class="language-${lang}"><code class="language-${lang}">${md.utils.escapeHtml(
+      str
+    )}</code></pre>`
+  },
+})
 function isDev() {
   for (const arg of process.argv) {
     if (arg.trim() === '-d') {
@@ -19,7 +33,6 @@ function isDev() {
 async function main() {
   const devMode = isDev()
   const workspace = process.cwd()
-  const converter = new showdown.Converter()
   const apiPug = path.join(workspace, './docs/api.pug')
   const apiTpl = pug.compileFile(apiPug)
   const result = parseFiles(['./packages/react-img/src/types.ts'], {
@@ -27,15 +40,15 @@ async function main() {
   })
   const interfaces = result.props.map((interface) => ({
     ...interface,
-    comment: interface.comment ? converter.makeHtml(interface.comment) : '',
+    comment: interface.comment ? md.render(interface.comment) : '',
     properties: interface.properties.map((prop) => ({
       ...prop,
-      comment: converter.makeHtml(prop.comment),
+      comment: md.render(prop.comment),
     })),
   }))
   const types = result.types.map((type) => ({
     ...type,
-    comment: type.comment ? converter.makeHtml(type.comment) : '',
+    comment: type.comment ? md.render(type.comment) : '',
   }))
   const targetPath = devMode ? './docs/api.html' : './docs/_site/api.html'
   let cssUrl

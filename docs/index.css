@@ -23,10 +23,11 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  background-color: rgb(21, 21, 21);
+  background-color: rgb(21, 21, 21, 0.5);
   color: #FFF;
   padding: 8px 12px;
   display: flex;
+  border-bottom-left-radius: 4px;
 }
 
 .example-container .codesandbox img {
@@ -93,7 +94,7 @@ body {
 }
 
 .props-table thead tr {
-  background-color: #1A7AF8;
+  background-color: #666;
   color: #ffffff;
   text-align: left;
 }
