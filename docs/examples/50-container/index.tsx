@@ -14,6 +14,7 @@ const Container = styled.div`
     width: 200px;
     height: 160px;
     background-size: cover;
+    margin-bottom: 10px;
   }
 `
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import styled from '@emotion/styled'
 import {
   checkWebpSupported,
   createImgPool,
@@ -8,6 +9,34 @@ import {
   Img,
   ImgPoolContext,
 } from '@robot-img/react-img'
+
+const Container = styled.div`
+  .div {
+    width: 300px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .content {
+    width: 160px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    line-height: 80px;
+    padding: 10px;
+  }
+  .span {
+    display: inline-flex;
+    width: 50px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  .img {
+    width: 50px;
+    height: 30px;
+  }
+`
 
 async function main() {
   // 判断浏览器是否支持 webp 格式图片
@@ -38,11 +67,16 @@ async function main() {
   const imgSrc = '//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg'
   // 真实加载的图片为： ${imgSrc}?x-oss-process=image/resize,m_fill,w_400,h_320/format,webp
   ReactDOM.render(
-    <ImgPoolContext.Provider value={imgPool}>
-      <Img src={imgSrc} style={{ width: 100 }} />
-      <Img.Span src={imgSrc} style={{ width: 100, height: 80, display: 'inline-flex' }} />
-      <Img.Div src={imgSrc} style={{ width: 100, height: 80 }} />
-    </ImgPoolContext.Provider>,
+    <Container>
+      <ImgPoolContext.Provider value={imgPool}>
+        <Img.Div src={imgSrc} className="div">
+          <div className="content">
+            <Img.Span src={imgSrc} className="span" />
+            <Img src={imgSrc} className="img" />
+          </div>
+        </Img.Div>
+      </ImgPoolContext.Provider>
+    </Container>,
     document.getElementById('30-css')
   )
 }
