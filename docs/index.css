@@ -10,6 +10,7 @@ body {
 }
 
 .example-container {
+  position: relative;
   display: flex;
   border-radius: 4px;
   overflow: hidden;
@@ -18,6 +19,29 @@ body {
   box-shadow: 0 0 12px 0 rgba(102, 102, 102, 0.12);
 }
 
+.example-container .codesandbox {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: rgb(21, 21, 21);
+  color: #FFF;
+  padding: 8px 12px;
+  display: flex;
+}
+
+.example-container .codesandbox img {
+  width: 20px;
+  margin-right: 5px;
+}
+
+.example-container .codesandbox a {
+  color: #FFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: middle;
+  text-decoration: none;
+
+}
 
 .example-container .example {
   flex: 1;

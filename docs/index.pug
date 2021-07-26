@@ -13,12 +13,16 @@ html
           a.menu-item(href='https://github.com/ykan/robot-img' target='_blank') Github
 
     if introHTML
-      .container.markdown-body!= introHTML
+      .container!= introHTML
 
     each demo in demos
-      .container.markdown-body!= demo.mdHTML
+      .container!= demo.mdHTML
       .container.example-container
         .example(id=demo.name)
+        .codesandbox
+          a(href=demo.codesandboxUrl)
+            img(src='https://codesandbox.io/static/media/logo.450f79e2.svg')
+            span Codesandbox
         .code
           pre.language-tsx
             code.language-tsx!= demo.code
