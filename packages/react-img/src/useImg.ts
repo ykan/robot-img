@@ -29,6 +29,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     onError,
     onLoaded,
     shouldUpdate = defaultShouldUpdate,
+    prepareImg,
     ...othersProps
   } = props
   const imgRef = React.useRef<T>(null)
@@ -62,6 +63,9 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   const finalLoadingType = React.useMemo(() => {
     return loadingType || imgPool.globalVars.loadingType || 'none'
   }, [loadingType, imgPool])
+  const finalPrepareImg = React.useMemo(() => {
+    return prepareImg || waitImgLoaded
+  }, [prepareImg])
 
   const [state, setState] = React.useState<ImgState>({
     src: '',
@@ -98,24 +102,12 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
         status: 'loading',
         rect,
       })
-      const currentPromise = waitImgLoaded(finalSrc, crossOrigin)
+      const currentPromise = finalPrepareImg(finalSrc, crossOrigin)
       loadingPromise.current = currentPromise
 
       // 保证执行最后一次函数执行的变更
-      currentPromise
-        .catch((reason) => {
-          if (loadingPromise.current !== currentPromise) {
-            return
-          }
-          setState({
-            src: finalLoadingType === 'src' ? finalErrorSrc : '',
-            originSrc: src,
-            status: 'error',
-            rect,
-          })
-          onError?.(reason)
-        })
-        .then((imgObj) => {
+      currentPromise.then(
+        (imgObj) => {
           if (loadingPromise.current !== currentPromise) {
             return
           }
@@ -126,13 +118,27 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
             rect,
           })
           onLoaded?.(imgObj!)
-        })
+        },
+        (reason) => {
+          if (loadingPromise.current !== currentPromise) {
+            return
+          }
+          setState({
+            src: finalLoadingType === 'src' ? finalErrorSrc : '',
+            originSrc: src,
+            status: 'error',
+            rect,
+          })
+          onError?.(reason)
+        }
+      )
     },
     [
       crossOrigin,
       finalDefaultSrc,
       finalErrorSrc,
       finalLoadingType,
+      finalPrepareImg,
       imgSrcTplFn,
       onError,
       onLoaded,

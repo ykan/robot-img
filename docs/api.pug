@@ -20,7 +20,7 @@ html
         if interfaceItem.properties.length
           .interface-item
             h3.interface-title= interfaceItem.name
-            .markdown-body!= interfaceItem.comment
+            div!= interfaceItem.comment
 
             table.props-table
               thead
@@ -38,7 +38,7 @@ html
                     else
                       td.type= prop.types.join('')
                     td= prop.optional
-                    td.comment.markdown-body!= prop.comment
+                    td.comment!= prop.comment
 
     if !cssUrl
       script(type='module' src='./index.ts')

@@ -25,7 +25,10 @@ export interface ImgPureProps {
    */
   srcTpl?: ImgSrcTplPropFn
 
-  /** 图片不同状态下的样式名前缀 */
+  /**
+   * 图片不同状态下的样式名前缀
+   * @default imgPool.globalVars.statusClassNamePrefix 如果不设置取全局默认值
+   */
   statusClassNamePrefix?: string
 
   /**
@@ -55,17 +58,34 @@ export interface ImgPureProps {
   loadingType?: 'src' | 'css' | 'none'
 
   /**
-   * 注意当 loadingType 存在时，该属性才会生效
+   * 预处理图片
+   * 注意当 `loadingType === 'src' || loadingType === 'css'` 存在时，该属性才会生效
+   * 默认处理方式：
+   * ```ts
+   * const img: HTMLImageElement = new Image()
+   * if (crossOrigin) {
+   *   img.crossOrigin = crossOrigin
+   * }
+   * img.src = imgSrc
+   * ```
+   */
+  prepareImg?: (
+    imgSrc: string,
+    crossOrigin?: 'anonymous' | 'use-credentials' | ''
+  ) => Promise<HTMLImageElement>
+
+  /**
+   * 注意当 `loadingType === 'src' || loadingType === 'css'` 存在时，该属性才会生效
    */
   crossOrigin?: 'anonymous' | 'use-credentials' | ''
   /**
    * 加载失败时调用
-   * 注意当 loadingType 存在时，该属性才会生效
+   * 注意当 `loadingType === 'src' || loadingType === 'css'` 存在时，该属性才会生效
    */
   onError?: (e: string | Event) => void
   /**
    * 加载成功时调用
-   * 注意当 loadingType 存在时，该属性才会生效
+   * 注意当 `loadingType === 'src' || loadingType === 'css'` 存在时，该属性才会生效
    */
   onLoaded?: (img: HTMLImageElement) => void
 }

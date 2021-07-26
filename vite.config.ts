@@ -16,4 +16,7 @@ export default defineConfig({
   build: {
     outDir: '_site',
   },
+  server: {
+    open: '/docs/',
+  },
 })
