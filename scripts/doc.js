@@ -6,6 +6,7 @@ const Prism = require('prismjs')
 const loadLanguages = require('prismjs/components/')
 const pug = require('pug')
 const chokidar = require('chokidar')
+const { performance } = require('perf_hooks')
 
 loadLanguages(['tsx'])
 const md = require('markdown-it')({
