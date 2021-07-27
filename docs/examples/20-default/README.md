@@ -1,4 +1,4 @@
 ### 默认设置
 
 默认情况将只实现懒加载功能，而不对图片后缀做任何处理，这个时候无需做任何设置，可以直接使用：
-[Open in codesandbox](https://codesandbox.io/s/5y07q)
+[Open in codesandbox](https://codesandbox.io/s/beer4)

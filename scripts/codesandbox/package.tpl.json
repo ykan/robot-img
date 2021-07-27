@@ -1,0 +1,16 @@
+{
+  "name": "robot-img-example",
+  "main": "./index.tsx",
+  "devDependencies": {
+    "typescript": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest"
+  },
+  "dependencies": {
+    "react": "latest",
+    "react-dom": "latest",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@robot-img/react-img": "latest"
+  }
+}

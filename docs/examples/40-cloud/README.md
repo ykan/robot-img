@@ -8,4 +8,4 @@
 
 > 也可以通过 `createSrcTplFactory` 快速创建一个全局图片处理函数
 
-[Open in codesandbox](https://codesandbox.io/s/td81n)
+[Open in codesandbox](https://codesandbox.io/s/7517h)

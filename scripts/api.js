@@ -21,17 +21,10 @@ const md = require('markdown-it')({
     )}</code></pre>`
   },
 })
-function isDev() {
-  for (const arg of process.argv) {
-    if (arg.trim() === '-d') {
-      return true
-    }
-  }
-  return false
-}
+const { hasArg } = require('./utils')
 
 async function main() {
-  const devMode = isDev()
+  const devMode = hasArg('-d')
   const workspace = process.cwd()
   const apiPug = path.join(workspace, './docs/api.pug')
   const apiTpl = pug.compileFile(apiPug)
