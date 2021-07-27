@@ -10,9 +10,10 @@
   "scripts": {
     "dev": "node scripts/doc.js && vite",
     "doc:w": "npm run build:api && node scripts/doc.js -w",
+    "commit": "git add . && cz",
     "clean": "rimraf packages/**/dist docs/_site docs/*.html",
-    "build": "npm run clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",
     "codesandbox": "node scripts/codesandbox/index.js",
+    "build": "npm run clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",
     "build:api": "node scripts/api.js -d",
     "build:doc": "node scripts/doc.js && vite build ./docs -c ./vite.config.ts && node scripts/api.js && node scripts/imgs.js",
     "test": "BABEL_ENV=test jest --detectOpenHandles --forceExit --verbose --coverage",

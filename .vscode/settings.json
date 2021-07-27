@@ -8,6 +8,9 @@
   "[css]": {
     "editor.formatOnSave": true
   },
+  "[json]": {
+    "editor.formatOnSave": true
+  },
   "[javascriptreact]": {
     "editor.formatOnSave": true
   },
