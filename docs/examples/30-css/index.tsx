@@ -27,7 +27,6 @@ const Container = styled.div`
     padding: 10px;
   }
   .span {
-    display: inline-flex;
     width: 50px;
     height: 30px;
     margin-right: 10px;
@@ -47,7 +46,7 @@ async function main() {
       webp,
     }),
     globalVars: {
-      className: 'custom-img',
+      className: 'css-style-img',
     },
   })
   // 可以用这个方法加一个默认样式
@@ -60,6 +59,9 @@ async function main() {
    *  background-size: cover;
    *  background-position: center;
    *  background-repeat: no-repeat;
+   * }
+   * span.${globalVars.className} {
+   *  display: inline-block;
    * }
    * ```
    */

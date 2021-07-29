@@ -108,7 +108,7 @@ export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPo
         // 放在前面，方便后续的样式覆盖当前这个样式
         window.document.head.insertAdjacentHTML(
           'afterbegin',
-          `<style>.${innerGlobalVars.className} { ${styles} }</style>`
+          `<style>.${innerGlobalVars.className} { ${styles} } span.${innerGlobalVars.className} { display: inline-block; }</style>`
         )
       }
     },
