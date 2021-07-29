@@ -12,7 +12,6 @@
     "doc:w": "npm run build:api && node scripts/doc.js -w",
     "commit": "git add . && cz",
     "clean": "rimraf packages/**/dist docs/_site docs/*.html",
-    "codesandbox": "node scripts/codesandbox/index.js",
     "build": "npm run clean && rollup -c rollup.config.es.js && rollup -c rollup.config.cjs.js && node ./scripts/dts.js",
     "build:api": "node scripts/api.js -d",
     "build:doc": "node scripts/doc.js && vite build ./docs -c ./vite.config.ts && node scripts/api.js && node scripts/imgs.js",
