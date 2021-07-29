@@ -5,6 +5,7 @@
 [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
 [![codecov](https://codecov.io/gh/ykan/robot-img/branch/main/graph/badge.svg?token=16W86248CN)](https://codecov.io/gh/ykan/robot-img)
 [![Test Report](https://github.com/ykan/robot-img/actions/workflows/ci.yml/badge.svg)](https://github.com/ykan/robot-img/actions/workflows/ci.yml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/47314d52-98d0-4796-a340-632754b097a1/deploy-status)](https://app.netlify.com/sites/robot-img/deploys)
 
 一个好用的图片 React 组件，可以实现图片懒加载、适配云厂商的图片处理功能。
 
