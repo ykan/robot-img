@@ -8,6 +8,8 @@ const pug = require('pug')
 const chokidar = require('chokidar')
 const { performance } = require('perf_hooks')
 
+const { getParameters } = require('codesandbox/lib/api/define')
+
 loadLanguages(['tsx'])
 const md = require('markdown-it')({
   highlight: (str, lang) => {
@@ -28,6 +30,39 @@ async function main() {
   const indexPug = path.join(workspace, './docs/index.pug')
   const outputPath = path.join(workspace, './docs/index.html')
   const indexMDPath = path.join(workspace, './docs/README.md')
+  const codesandboxTplDir = path.join(workspace, './scripts/codesandbox')
+  const codesandboxHTML = await fs.readFile(path.join(codesandboxTplDir, 'index.tpl.html'), 'utf8')
+  const codesandboxPkgJson = await fs.readFile(
+    path.join(codesandboxTplDir, 'package.tpl.json'),
+    'utf8'
+  )
+  const codesandboxTsconfigJson = await fs.readFile(
+    path.join(codesandboxTplDir, 'tsconfig.tpl.json'),
+    'utf8'
+  )
+
+  function getCodesandboxParameters(indexContent) {
+    return getParameters({
+      files: {
+        'index.tsx': {
+          content: indexContent,
+          isBinary: false,
+        },
+        'index.html': {
+          content: codesandboxHTML,
+          isBinary: false,
+        },
+        'package.json': {
+          isBinary: false,
+          content: codesandboxPkgJson,
+        },
+        'tsconfig.json': {
+          isBinary: false,
+          content: codesandboxTsconfigJson,
+        },
+      },
+    })
+  }
 
   async function render() {
     const time = performance.now()
@@ -59,6 +94,7 @@ async function main() {
         const code = await fs.readFile(indexFile, 'utf8')
         // Returns a highlighted HTML string
         demoItem.code = Prism.highlight(code, Prism.languages.tsx, 'tsx')
+        demoItem.codesandboxParameters = getCodesandboxParameters(code.replace(example, 'root'))
         demos.push(demoItem)
       }
     }

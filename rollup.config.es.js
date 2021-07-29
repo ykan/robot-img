@@ -8,7 +8,11 @@ export default [
       format: 'es',
       sourcemap: true,
     },
-    plugins: [typescript()],
+    plugins: [
+      typescript({
+        tslib: './node_modules/typescript/lib',
+      }),
+    ],
   },
   {
     input: './packages/utils/src/index.ts',
@@ -17,6 +21,10 @@ export default [
       format: 'es',
       sourcemap: true,
     },
-    plugins: [typescript()],
+    plugins: [
+      typescript({
+        tslib: './node_modules/typescript/lib',
+      }),
+    ],
   },
 ]

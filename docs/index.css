@@ -41,12 +41,14 @@ body {
   margin-right: 5px;
 }
 
-.example-container .codesandbox a {
+.example-container .codesandbox button {
+  border: none;
+  background-color: transparent;
   color: #fff;
   display: inline-flex;
   align-items: center;
-  justify-content: middle;
-  text-decoration: none;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .example-container .example {

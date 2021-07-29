@@ -9,10 +9,13 @@ block main
     .container.md-body!= demo.mdHTML
     .container.example-container
       .example(id=demo.name)
-      .codesandbox
-        a(href=demo.codesandboxUrl target='_blank')
-          img(src='https://codesandbox.io/static/media/logo.450f79e2.svg')
-          span Codesandbox
+      if demo.codesandboxParameters
+        .codesandbox
+          form(action='https://codesandbox.io/api/v1/sandboxes/define' method='post' target='_blank')
+            input(type='hidden' name='parameters' value=demo.codesandboxParameters)
+            button(type='submit')
+              img(src='https://codesandbox.io/static/media/logo.450f79e2.svg')
+              span Codesandbox
       .code
         pre.language-tsx
           code.language-tsx!= demo.code
