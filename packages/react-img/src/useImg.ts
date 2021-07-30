@@ -224,7 +224,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
 
     const rect = imgRef.current.getBoundingClientRect()
     // 如果关闭懒加载，那么直接加载图片
-    if (!lazy) {
+    if (lazy === 'off') {
       loadImg(rect)
       return
     }

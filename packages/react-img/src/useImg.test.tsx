@@ -67,7 +67,7 @@ describe('测试 useImg 跟 effect 相关的情况', () => {
       return <ImgPoolContext.Provider value={pool}>{children}</ImgPoolContext.Provider>
     }
     const { result, rerender } = renderHook(
-      ({ src }: any = {}) => useImg({ src, lazy: false }, imgRef),
+      ({ src }: any = {}) => useImg({ src, lazy: 'off' }, imgRef),
       {
         wrapper,
       }
@@ -221,7 +221,7 @@ describe('useImgWithStyle', () => {
     const imgEl = window.document.createElement('div')
     const imgRef = React.createRef<HTMLDivElement>()
     const { result, rerender } = renderHook(({ src }: any = {}) =>
-      useImgWithStyle({ src, lazy: false }, imgRef)
+      useImgWithStyle({ src, lazy: 'off' }, imgRef)
     )
     result.current.handleRef!(imgEl)
 

@@ -33,9 +33,12 @@ export interface ImgPureProps {
 
   /**
    * 懒加载模式
+   * - 'scroll' 检测容器滚动
+   * - 'resize' 检测当前节点 DOMRect 变化
+   * - 'off' 关闭懒加载，图片不做任何检测，会直接处理 src
    * @default 'scroll' 默认检测滚动
    */
-  lazy?: false | 'scroll' | 'resize'
+  lazy?: 'scroll' | 'resize' | 'off'
 
   /**
    * 当 lazy === 'resize' 时，判断是否要更新图片
