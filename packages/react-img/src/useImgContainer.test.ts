@@ -23,11 +23,7 @@ afterAll(() => {
 test('一般情况', () => {
   const container = window.document.createElement('div')
   const containerRef = React.createRef<HTMLDivElement>()
-  const { result, rerender } = renderHook(({ name }: any = {}) =>
-    useImgContainer({ name }, containerRef)
-  )
-  result.current.handleRef!(container)
-  rerender({ name: 'example' })
+  ;(containerRef as any).current = container
+  const { result } = renderHook(({ name }: any = {}) => useImgContainer({ name }, containerRef))
   expect(result.current.pool.reset).toHaveBeenCalled()
-  expect(result.current.pool.container).toBe(container)
 })

@@ -118,11 +118,13 @@ export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPo
     },
 
     reset(newOpts) {
-      if (newOpts.tickTime) {
+      let shouldInit = false
+      if (newOpts.tickTime && newOpts.tickTime > 0) {
         innerTickTime = newOpts.tickTime
       }
       if (newOpts.getContainerRect) {
         innerGetContainerRect = newOpts.getContainerRect
+        shouldInit = true
       }
       if (newOpts.createSrcTpl) {
         finalSrcTpl = createSrcTpl(newOpts.createSrcTpl)
@@ -132,11 +134,14 @@ export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPo
       }
       if (newOpts.container) {
         innerContainer = newOpts.container
+        shouldInit = true
       }
       if (newOpts.globalVars) {
         innerGlobalVars = newOpts.globalVars
       }
-      instance.init()
+      if (shouldInit) {
+        instance.init()
+      }
     },
     init() {
       instance.destroy()

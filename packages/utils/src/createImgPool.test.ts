@@ -131,9 +131,11 @@ describe('init & reset', () => {
   })
   test('reset name', () => {
     const pool = createImgPool({ name: 'name' }, false)
+    const initFn = jest.spyOn(pool, 'init')
     expect(pool.name.includes('name')).toBe(true)
     pool.reset({ name: 'custom' })
     expect(pool.name.includes('custom')).toBe(true)
+    expect(initFn).not.toHaveBeenCalled()
   })
   test('reset globalVar', () => {
     const pool = createImgPool({ name: 'name' }, false)
