@@ -122,6 +122,27 @@ describe('测试图片检测相关情况', () => {
     expect(onChecked).toBeCalledTimes(0)
   })
 })
+describe('test global shouldUpdate', () => {
+  test('当 rect 没变，返回 false', () => {
+    const pool = createImgPool({}, false)
+    const newRect = { width: 10, height: 10 }
+    const oldRect = { width: 10, height: 10 }
+    expect(pool.globalVars.shouldUpdate!(newRect as DOMRect, oldRect as DOMRect)).toBe(false)
+  })
+
+  test('当 rect 的 width 变大 20%，返回 true', () => {
+    const pool = createImgPool({}, false)
+    const newRect = { width: 12.1, height: 10 }
+    const oldRect = { width: 10, height: 10 }
+    expect(pool.globalVars.shouldUpdate!(newRect as DOMRect, oldRect as DOMRect)).toBe(true)
+  })
+  test('当 rect 的 height 变大 20%，返回 true', () => {
+    const pool = createImgPool({}, false)
+    const newRect = { width: 10, height: 12.1 }
+    const oldRect = { width: 10, height: 10 }
+    expect(pool.globalVars.shouldUpdate!(newRect as DOMRect, oldRect as DOMRect)).toBe(true)
+  })
+})
 
 describe('init & reset', () => {
   test('reset tickTime', () => {
@@ -145,6 +166,14 @@ describe('init & reset', () => {
       },
     })
     expect(pool.globalVars.defaultSrc).toBe('src')
+    pool.reset({
+      globalVars: {
+        errorSrc: 'errorSrc',
+      },
+    })
+
+    expect(pool.globalVars.defaultSrc).toBe('src')
+    expect(pool.globalVars.errorSrc).toBe('errorSrc')
   })
   test('reset createSrcTpl', () => {
     const pool = createImgPool({}, false)

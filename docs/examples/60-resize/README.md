@@ -4,14 +4,17 @@
 
 ```ts
 function defaultShouldUpdate(newRect: DOMRect, oldRect: DOMRect) {
-  const newArea = newRect.width * newRect.height
-  const oldArea = oldRect.width * oldRect.height
-
-  // 当面积变大 20% 时，才更新图片
-  return newArea > oldArea * 1.2
+  // 当 width or height 变大 20% 时，才更新图片
+  return newRect.width > oldRect.width * 1.2 || newRect.height > oldRect.height * 1.2
 }
 ```
 
-也可以通过给组件传 `shouldUpdate` 来定义图片是否需要更新
+也可以通过给组件传 `shouldUpdate` 来定义图片是否需要更新，也可以通过
 
+```ts
+imgPool.reset({
+  globalVars: { shouldUpdate: (newRect, oldRect) => true }
+})
+```
 
+设置全家默认的 `shouldUpdate` 。

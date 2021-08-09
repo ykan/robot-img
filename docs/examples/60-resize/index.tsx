@@ -15,7 +15,7 @@ const Container = styled.div`
     background-size: cover;
     background-position: center;
     transition: background-image 0.3s;
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
   button {
     margin-right: 10px;
@@ -60,13 +60,13 @@ function App() {
 
   return (
     <Container>
+      <button onClick={handleAdd}>宽高变大10%</button>
+      <button onClick={handleCut}>宽高变小10%</button>
       <Img
         style={imgStyle}
         lazy="resize"
         src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg"
       />
-      <button onClick={handleAdd}>宽高变大10%</button>
-      <button onClick={handleCut}>宽高变小10%</button>
     </Container>
   )
 }

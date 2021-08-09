@@ -47,7 +47,12 @@ export interface ImgPoolGlobals {
   className?: string
   /** 图片不同状态下的样式名前缀 */
   statusClassNamePrefix?: string
-  [key: string]: string | undefined
+  /**
+   * 当 lazy === 'resize' 时，判断是否要更新图片
+   * 默认当 width 或者 height 变大至少20%，才更新图片
+   */
+  shouldUpdate?: (newRect: DOMRect, oldRect: DOMRect) => boolean
+  [key: string]: any | undefined
 }
 
 export interface ImgPoolOptions {

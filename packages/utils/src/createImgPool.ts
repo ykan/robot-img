@@ -1,7 +1,14 @@
 import { createSrcTpl } from './createSrcTpl'
 import { isWindow, overlap } from './utils'
 
-import type { ImgEventType, ImgItem, ImgPool, ImgPoolOptions, ImgRect } from './types'
+import type {
+  ImgEventType,
+  ImgItem,
+  ImgPool,
+  ImgPoolOptions,
+  ImgRect,
+  ImgPoolGlobals,
+} from './types'
 let uid = 0
 
 function getWinRect() {
@@ -39,6 +46,12 @@ function defaultGetContainerRect(rect: DOMRect) {
     right: rect.right + rect.width * 0.5,
   }
 }
+
+function defaultShouldUpdate(newRect: DOMRect, oldRect: DOMRect) {
+  // 当 width or height 变大 20% 时，才更新图片
+  return newRect.width > oldRect.width * 1.2 || newRect.height > oldRect.height * 1.2
+}
+
 export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPool {
   const {
     container = window,
@@ -57,7 +70,10 @@ export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPo
   let innerTickTime = tickTime || 150
   let innerContainer = container
   let innerGetContainerRect = getContainerRect
-  let innerGlobalVars = globalVars || {}
+  let innerGlobalVars: ImgPoolGlobals = {
+    shouldUpdate: defaultShouldUpdate,
+    ...globalVars,
+  }
   let finalSrcTpl = createSrcTpl(argCreateSrcTpl)
   let innerName = name ? `${name}_${uid++}` : `${uid++}`
   let innerIsOverlapWindow = false
@@ -137,7 +153,10 @@ export function createImgPool(opts: ImgPoolOptions = {}, autoTick = true): ImgPo
         shouldInit = true
       }
       if (newOpts.globalVars) {
-        innerGlobalVars = newOpts.globalVars
+        innerGlobalVars = {
+          ...innerGlobalVars,
+          ...newOpts.globalVars,
+        }
       }
       if (shouldInit) {
         instance.init()

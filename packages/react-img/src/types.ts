@@ -42,7 +42,8 @@ export interface ImgPureProps {
 
   /**
    * 当 lazy === 'resize' 时，判断是否要更新图片
-   * 默认当面积变大至少20%，才更新图片
+   * 默认当 width 或者 height 变大至少20%，才更新图片
+   * @default imgPool.globalVars.shouldUpdate 如果不设置取全局默认值
    */
   shouldUpdate?: (newRect: DOMRect, oldRect: DOMRect) => boolean
 

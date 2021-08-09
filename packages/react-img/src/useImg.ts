@@ -7,14 +7,6 @@ import { useForkRef } from './useForkRef'
 
 import type { ImgProps, ImgState } from './types'
 
-function defaultShouldUpdate(newRect: DOMRect, oldRect: DOMRect) {
-  const newArea = newRect.width * newRect.height
-  const oldArea = oldRect.width * oldRect.height
-
-  // 当面积变大 20% 时，才更新图片
-  return newArea > oldArea * 1.2
-}
-
 export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref<T>) {
   const {
     src = '',
@@ -28,7 +20,7 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
     crossOrigin,
     onError,
     onLoaded,
-    shouldUpdate = defaultShouldUpdate,
+    shouldUpdate,
     prepareImg,
     ...othersProps
   } = props
@@ -54,15 +46,18 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
   }, [srcTpl, imgPool])
   const finalDefaultSrc = React.useMemo(
     () => defaultSrc || imgPool.globalVars.defaultSrc || '',
-    [defaultSrc, imgPool]
+    [defaultSrc, imgPool.globalVars.defaultSrc]
   )
   const finalErrorSrc = React.useMemo(
     () => errorSrc || imgPool.globalVars.errorSrc || '',
-    [errorSrc, imgPool]
+    [errorSrc, imgPool.globalVars.errorSrc]
   )
   const finalLoadingType = React.useMemo(() => {
     return loadingType || imgPool.globalVars.loadingType || 'none'
-  }, [loadingType, imgPool])
+  }, [loadingType, imgPool.globalVars.loadingType])
+  const finalShouldUpdate = React.useMemo(() => {
+    return shouldUpdate || imgPool.globalVars.shouldUpdate || (() => true)
+  }, [shouldUpdate, imgPool.globalVars.shouldUpdate])
   const finalPrepareImg = React.useMemo(() => {
     return prepareImg || waitImgLoaded
   }, [prepareImg])
@@ -180,11 +175,11 @@ export function useImg<T extends HTMLElement>(props: ImgProps<T>, ref: React.Ref
       if (!poolRef.current.overlap(rect)) {
         return
       }
-      if (shouldUpdate(rect, state.rect)) {
+      if (finalShouldUpdate(rect, state.rect)) {
         loadImg(rect)
       }
     }
-  }, [loadImg, shouldUpdate, state.rect])
+  }, [finalShouldUpdate, loadImg, state.rect])
 
   const lazyCheckFn: ImgItem['onChecked'] = React.useCallback(() => {
     imgItemRef.current.shouldCheck = false
