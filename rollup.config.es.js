@@ -1,17 +1,20 @@
-import typescript from '@rollup/plugin-typescript'
+import { babel } from '@rollup/plugin-babel'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+const extensions = ['.ts', '.tsx']
 export default [
   {
     input: './packages/react-img/src/index.ts',
-    external: ['@robot-img/utils'],
+    external: ['@robot-img/utils', 'react'],
     output: {
       file: './packages/react-img/dist/react-img.esm.js',
       format: 'es',
       sourcemap: true,
     },
     plugins: [
-      typescript({
-        tslib: './node_modules/typescript/lib',
+      nodeResolve({
+        extensions,
       }),
+      babel({ babelHelpers: 'inline', extensions }),
     ],
   },
   {
@@ -22,9 +25,10 @@ export default [
       sourcemap: true,
     },
     plugins: [
-      typescript({
-        tslib: './node_modules/typescript/lib',
+      nodeResolve({
+        extensions,
       }),
+      babel({ babelHelpers: 'inline', extensions }),
     ],
   },
 ]
