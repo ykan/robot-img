@@ -1,6 +1,6 @@
 export * from './types'
 export { createImgPool } from './createImgPool'
-export { checkWebpSupported, waitImgLoaded } from './utils'
+export { checkWebpSupported, waitImgLoaded, checkWebpSupportedSync } from './utils'
 export {
   createSrcTplOfAliOss,
   createSrcTplOfKSYunKS3,

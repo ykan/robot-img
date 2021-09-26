@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import styled from '@emotion/styled'
 import {
-  checkWebpSupported,
+  checkWebpSupportedSync,
   createImgPool,
   createSrcTplOfAliOss,
   Img,
@@ -85,7 +85,7 @@ async function main() {
   // 阿里云，参考：https://help.aliyun.com/document_detail/44688.html
   const imgPoolAliOss = createImgPool({
     createSrcTpl: createSrcTplOfAliOss({
-      webp: await checkWebpSupported(),
+      webp: checkWebpSupportedSync(),
     }),
     globalVars: {
       className: 'ali-oss-img',

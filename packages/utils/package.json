@@ -1,6 +1,6 @@
 {
   "name": "@robot-img/utils",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "robot-img",
   "main": "dist/utils.cjs.js",
   "module": "dist/utils.esm.js",

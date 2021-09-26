@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import styled from '@emotion/styled'
 import { Img, ImgContainer, imgPool } from '@robot-img/react-img'
-import { checkWebpSupported, createSrcTplOfAliOss } from '@robot-img/utils'
+import { checkWebpSupportedSync, createSrcTplOfAliOss } from '@robot-img/utils'
 
 const Container = styled.div`
   .img-container {
@@ -19,7 +19,7 @@ const Container = styled.div`
 `
 
 async function main() {
-  const webp = await checkWebpSupported()
+  const webp = checkWebpSupportedSync()
   imgPool.reset({
     createSrcTpl: createSrcTplOfAliOss({
       webp,

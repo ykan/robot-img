@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import styled from '@emotion/styled'
 import {
-  checkWebpSupported,
+  checkWebpSupportedSync,
   createImgPool,
   createSrcTplFactory,
   createSrcTplOfAliOss,
@@ -22,9 +22,9 @@ const Container = styled.div`
   }
 `
 
-async function main() {
+function main() {
   // 判断浏览器是否支持 webp 格式图片
-  const webp = await checkWebpSupported()
+  const webp = checkWebpSupportedSync()
   // 阿里云，参考：https://help.aliyun.com/document_detail/44688.html
   const imgPoolAliOss = createImgPool({
     createSrcTpl: createSrcTplOfAliOss({

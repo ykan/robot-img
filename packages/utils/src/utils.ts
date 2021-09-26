@@ -48,3 +48,16 @@ export async function checkWebpSupported() {
   } catch (e) {}
   return false
 }
+
+// copy from: https://stackoverflow.com/questions/5573096/detecting-webp-support/27232658#27232658
+export function checkWebpSupportedSync() {
+  const elem = window.document.createElement('canvas')
+
+  if (elem?.getContext('2d')) {
+    // was able or not to get WebP representation
+    return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0
+  } else {
+    // very old browser like IE 8, canvas not supported
+    return false
+  }
+}

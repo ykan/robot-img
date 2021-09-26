@@ -1,6 +1,6 @@
 {
   "name": "@robot-img/react-img",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "robot-img",
   "main": "dist/react-img.cjs.js",
   "module": "dist/react-img.esm.js",
@@ -10,7 +10,7 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@robot-img/utils": "1.0.0-beta.5"
+    "@robot-img/utils": "1.0.0-beta.6"
   },
   "peerDependencies": {
     "@types/react": ">=16.9.0",

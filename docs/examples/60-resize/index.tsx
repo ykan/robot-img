@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import styled from '@emotion/styled'
 import {
-  checkWebpSupported,
+  checkWebpSupportedSync,
   createSrcTplOfAliOss,
   imgPool,
   ImgProps,
@@ -71,8 +71,8 @@ function App() {
   )
 }
 
-async function main() {
-  const webp = await checkWebpSupported()
+function main() {
+  const webp = checkWebpSupportedSync()
   imgPool.reset({
     createSrcTpl: createSrcTplOfAliOss({
       webp,

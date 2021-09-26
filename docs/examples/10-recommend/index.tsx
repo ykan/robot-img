@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import styled from '@emotion/styled'
 import {
-  checkWebpSupported,
+  checkWebpSupportedSync,
   createSrcTplOfAliOss,
   imgPool,
   ImgProps,
@@ -31,14 +31,13 @@ const OssImg = styled(Img)`
   height: 160px;
 `
 
-async function main() {
-  // 判断浏览器是否支持 webp 格式图片
-  const webp = await checkWebpSupported()
+function main() {
   // 根据云厂商来设置全局图片后缀，获取最适合的图片
   // 这里使用的阿里云的图片处理作为案例
   imgPool.reset({
     createSrcTpl: createSrcTplOfAliOss({
-      webp,
+      // 判断浏览器是否支持 webp 格式图片
+      webp: checkWebpSupportedSync(),
     }),
   })
   const imgSrc = '//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg'
